@@ -123,26 +123,39 @@
       loadQuizDetails();
     };
 
-    function loadQuizDetails() {
-      fetch(`${API_URL}?action=getQuizBundle&quizId=${encodeURIComponent(state.quizId)}`)
-        .then(res => res.json())
-        .then(data => {
-          if (!data || !data.meta) {
-            throw new Error("Quiz nahi mila ya inactive hai.");
-          }
-          state.quizBundle = data;
-          document.getElementById('topQuizTitle').innerText = data.meta.title || "Examination";
-          document.getElementById('quizHeading').innerText = data.meta.title || "Examination";
-          document.getElementById('quizDetails').innerText = 
-            `Duration: ${data.meta.duration_minutes || 15} Mins | Class: ${data.meta.class_tag || 'All'}`;
-          
-          showScreen('viewRegister');
-        })
-        .catch(err => {
-          document.getElementById('viewLoading').innerHTML = 
-            `<h3 style="color:#dc2626;">Error Loading Quiz</h3><p style="margin-top:8px;">${err.message}</p>`;
-        });
+function loadQuizDetails() {
+  const fetchUrl = `${API_URL}?action=getQuizBundle&quizId=${encodeURIComponent(state.quizId)}`;
+
+  fetch(fetchUrl, {
+    method: 'GET',
+    mode: 'cors',
+    redirect: 'follow'
+  })
+  .then(res => {
+    if (!res.ok) throw new Error("Network response not OK: " + res.statusText);
+    return res.json();
+  })
+  .then(data => {
+    console.log("Quiz Data:", data);
+    if (!data || !data.meta) {
+      throw new Error("Quiz data load nahi hua ya Quiz ID galat hai.");
     }
+    state.quizBundle = data;
+    document.getElementById('topQuizTitle').innerText = data.meta.title || "Examination";
+    document.getElementById('quizHeading').innerText = data.meta.title || "Examination";
+    document.getElementById('quizDetails').innerText = 
+      `Duration: ${data.meta.duration_minutes || 15} Mins | Class: ${data.meta.class_tag || 'All'}`;
+    
+    showScreen('viewRegister');
+  })
+  .catch(err => {
+    console.error("Fetch Error:", err);
+    document.getElementById('viewLoading').innerHTML = 
+      `<h3 style="color:#dc2626;">Quiz Load Nahi Hua</h3>
+       <p style="margin-top:8px; color:#4b5563;">Error: ${err.message}</p>
+       <p style="margin-top:10px; font-size:0.85rem; color:#6b7280;">Quiz ID: <b>${state.quizId}</b></p>`;
+  });
+}
 
     function showScreen(screenId) {
       ['viewLoading', 'viewRegister', 'viewExam', 'viewResult'].forEach(id => {
