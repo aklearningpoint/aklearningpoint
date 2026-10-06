@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Online Assessment | AK Learning Point</title>
+  <style>
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; }
+    body { background: #f3f4f6; color: #1f2937; min-height: 100vh; display: flex; flex-direction: column; }
+    header { background: #1e3a8a; color: white; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    header h1 { font-size: 1.1rem; font-weight: 600; }
+    .badge { background: #3b82f6; padding: 4px 10px; border-radius: 999px; font-size: 0.85rem; font-weight: 500; }
+    
+    .container { max-width: 760px; margin: 20px auto; padding: 0 16px; width: 100%; flex: 1; }
+    .card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+    
+    .input-group { margin-bottom: 16px; }
+    .input-group label { display: block; font-size: 0.88rem; font-weight: 600; color: #374151; margin-bottom: 6px; }
+    .input-group input { width: 100%; padding: 10px 14px; border: 1.5px solid #d1d5db; border-radius: 8px; font-size: 0.95rem; }
+    .input-group input:focus { outline: none; border-color: #2563eb; }
+
+    .btn { display: inline-block; width: 100%; padding: 12px; background: #2563eb; color: white; font-weight: 600; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; text-align: center; }
+    .btn:hover { background: #1d4ed8; }
+    .btn-secondary { background: #6b7280; margin-top: 10px; }
+    
+    .question-box { margin-bottom: 20px; }
+    .q-text { font-size: 1.05rem; font-weight: 600; margin-bottom: 14px; line-height: 1.5; }
+    .option-item { display: flex; align-items: center; gap: 10px; padding: 12px; margin-bottom: 8px; border: 1px solid #e5e7eb; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+    .option-item:hover { background: #f9fafb; }
+    .option-item input { accent-color: #2563eb; width: 18px; height: 18px; }
+
+    .nav-buttons { display: flex; gap: 12px; margin-top: 20px; }
+    .status-msg { text-align: center; padding: 40px 16px; }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1 id="topQuizTitle">AK Learning Point Examination</h1>
+    <div id="topTimerBadge" class="badge hidden">Time: <span id="timeRemaining">--:--</span></div>
+  </header>
+
+  <div class="container">
+    <!-- Screen 1: Loading State -->
+    <div id="viewLoading" class="card status-msg">
+      <h3 style="color:#2563eb; margin-bottom:8px;">Quiz load ho raha hai...</h3>
+      <p style="color:#6b7280; font-size:0.9rem;">Kripya wait karein, question paper fetch ho raha hai.</p>
+    </div>
+
+    <!-- Screen 2: Student Registration -->
+    <div id="viewRegister" class="card hidden">
+      <h2 id="quizHeading" style="margin-bottom: 6px;">Test Title</h2>
+      <p id="quizDetails" style="color: #6b7280; font-size: 0.9rem; margin-bottom: 20px;">Duration: -- mins | Class: --</p>
+      
+      <div class="input-group">
+        <label>Aapka Pura Naam (Student Name) *</label>
+        <input type="text" id="studName" placeholder="Enter Full Name">
+      </div>
+      <div class="input-group">
+        <label>Mobile Number *</label>
+        <input type="tel" id="studMobile" placeholder="10-digit Mobile Number">
+      </div>
+      <div class="input-group">
+        <label>Class / Target Exam</label>
+        <input type="text" id="studClass" placeholder="e.g. Class 10 / General">
+      </div>
+      
+      <button class="btn" onclick="startAssessment()">Start Test Now</button>
+    </div>
+
+    <!-- Screen 3: Exam Player -->
+    <div id="viewExam" class="card hidden">
+      <div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:0.85rem; color:#6b7280;">
+        <span id="questionCounter">Question 1 of 10</span>
+      </div>
+
+      <div class="question-box">
+        <div class="q-text" id="renderQuestionText">Question text will load here...</div>
+        <div id="renderOptionsContainer"></div>
+      </div>
+
+      <div class="nav-buttons">
+        <button class="btn btn-secondary" id="btnPrev" onclick="navigateQuestion(-1)">Previous</button>
+        <button class="btn" id="btnNext" onclick="navigateQuestion(1)">Next</button>
+        <button class="btn" id="btnSubmitExam" style="background:#16a34a;" onclick="submitFinalAttempt()">Submit</button>
+      </div>
+    </div>
+
+    <!-- Screen 4: Result Certificate -->
+    <div id="viewResult" class="card status-msg hidden">
+      <h2 style="color:#16a34a; margin-bottom:10px;">Test Submitted Successfully!</h2>
+      <p style="margin-bottom:20px; color:#4b5563;">Aapka result evaluate ho gaya hai.</p>
+      <div id="resultSummary" style="font-size:1.1rem; font-weight:600; margin-bottom:24px;"></div>
+      <button class="btn" onclick="window.location.reload()">Take Another Test</button>
+    </div>
+  </div>
+
+  <script>
+    // Config: Apps Script Backend API Endpoint
+    const API_URL = "https://script.google.com/macros/s/AKfycbwRDQuXVyKGKfCI-kifRPb-vzb8Uv2AIv7YzMSihcP5iKPlR9BJj-DVSSDp8q_VWTij/exec";
+
+    let state = {
+      quizId: "",
+      quizBundle: null,
+      currentUser: {},
+      currentIndex: 0,
+      userAnswers: {},
+      timerSeconds: 0,
+      timerTimer: null
+    };
+
+    window.onload = function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      state.quizId = urlParams.get('quiz_id') || urlParams.get('quizId');
+
+      if (!state.quizId) {
+        document.getElementById('viewLoading').innerHTML = 
+          '<h3 style="color:#dc2626;">Invalid Quiz Link</h3><p style="margin-top:8px;">URL mein quiz_id missing hai. Kripya sahi link use karein.</p>';
+        return;
+      }
+
+      loadQuizDetails();
+    };
+
+    function loadQuizDetails() {
+      fetch(`${API_URL}?action=getQuizBundle&quizId=${encodeURIComponent(state.quizId)}`)
+        .then(res => res.json())
+        .then(data => {
+          if (!data || !data.meta) {
+            throw new Error("Quiz nahi mila ya inactive hai.");
+          }
+          state.quizBundle = data;
+          document.getElementById('topQuizTitle').innerText = data.meta.title || "Examination";
+          document.getElementById('quizHeading').innerText = data.meta.title || "Examination";
+          document.getElementById('quizDetails').innerText = 
+            `Duration: ${data.meta.duration_minutes || 15} Mins | Class: ${data.meta.class_tag || 'All'}`;
+          
+          showScreen('viewRegister');
+        })
+        .catch(err => {
+          document.getElementById('viewLoading').innerHTML = 
+            `<h3 style="color:#dc2626;">Error Loading Quiz</h3><p style="margin-top:8px;">${err.message}</p>`;
+        });
+    }
+
+    function showScreen(screenId) {
+      ['viewLoading', 'viewRegister', 'viewExam', 'viewResult'].forEach(id => {
+        document.getElementById(id).classList.add('hidden');
+      });
+      document.getElementById(screenId).classList.remove('hidden');
+    }
+
+    function startAssessment() {
+      const name = document.getElementById('studName').value.trim();
+      const mobile = document.getElementById('studMobile').value.trim();
+      const classTag = document.getElementById('studClass').value.trim();
+
+      if (!name || mobile.length < 10) {
+        alert("Kripya apna pura naam aur valid 10-digit mobile number enter karein.");
+        return;
+      }
+
+      state.currentUser = { name, mobile, class_tag: classTag };
+      state.currentIndex = 0;
+      state.userAnswers = {};
+
+      const duration = parseInt(state.quizBundle.meta.duration_minutes) || 15;
+      state.timerSeconds = duration * 60;
+
+      document.getElementById('topTimerBadge').classList.remove('hidden');
+      startTimer();
+      renderCurrentQuestion();
+      showScreen('viewExam');
+    }
+
+    function startTimer() {
+      updateTimerDisplay();
+      state.timerTimer = setInterval(() => {
+        state.timerSeconds--;
+        updateTimerDisplay();
+        if (state.timerSeconds <= 0) {
+          clearInterval(state.timerTimer);
+          alert("Time's up! Aapka test auto-submit ho raha hai.");
+          submitFinalAttempt();
+        }
+      }, 1000);
+    }
+
+    function updateTimerDisplay() {
+      const mins = Math.floor(state.timerSeconds / 60);
+      const secs = state.timerSeconds % 60;
+      document.getElementById('timeRemaining').innerText = 
+        `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    function renderCurrentQuestion() {
+      const questions = state.quizBundle.questions;
+      const q = questions[state.currentIndex];
+      
+      document.getElementById('questionCounter').innerText = `Question ${state.currentIndex + 1} of ${questions.length}`;
+      document.getElementById('renderQuestionText').innerText = `${state.currentIndex + 1}. ${q.question_text}`;
+
+      const container = document.getElementById('renderOptionsContainer');
+      container.innerHTML = "";
+
+      const options = [
+        { key: 'A', text: q.option_a },
+        { key: 'B', text: q.option_b },
+        { key: 'C', text: q.option_c },
+        { key: 'D', text: q.option_d }
+      ];
+
+      options.forEach(opt => {
+        if (!opt.text) return;
+        const optRow = document.createElement('label');
+        optRow.className = "option-item";
+        
+        const isChecked = state.userAnswers[q.question_id] === opt.key ? 'checked' : '';
+        optRow.innerHTML = `
+          <input type="radio" name="active_opt" value="${opt.key}" ${isChecked} onchange="recordAnswer('${q.question_id}', '${opt.key}')">
+          <span><strong>${opt.key}.</strong> ${opt.text}</span>
+        `;
+        container.appendChild(optRow);
+      });
+
+      document.getElementById('btnPrev').style.display = state.currentIndex === 0 ? 'none' : 'block';
+      if (state.currentIndex === questions.length - 1) {
+        document.getElementById('btnNext').style.display = 'none';
+        document.getElementById('btnSubmitExam').style.display = 'block';
+      } else {
+        document.getElementById('btnNext').style.display = 'block';
+        document.getElementById('btnSubmitExam').style.display = 'none';
+      }
+    }
+
+    function recordAnswer(qId, selectedOption) {
+      state.userAnswers[qId] = selectedOption;
+    }
+
+    function navigateQuestion(direction) {
+      state.currentIndex += direction;
+      renderCurrentQuestion();
+    }
+
+    function submitFinalAttempt() {
+      if (state.timerTimer) clearInterval(state.timerTimer);
+
+      document.getElementById('topTimerBadge').classList.add('hidden');
+      showScreen('viewLoading');
+      document.getElementById('viewLoading').innerHTML = 
+        '<h3 style="color:#2563eb;">Test Submit Ho Raha Hai...</h3><p style="margin-top:8px;">Aapke marks evaluate kiye ja rahe hain.</p>';
+
+      const payload = {
+        quiz_id: state.quizBundle.meta.quiz_id,
+        name: state.currentUser.name,
+        mobile: state.currentUser.mobile,
+        class_tag: state.currentUser.class_tag,
+        answers: state.userAnswers
+      };
+
+      fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      })
+      .then(res => res.json())
+      .then(evalResult => {
+        showScreen('viewResult');
+        const score = evalResult.score !== undefined ? evalResult.score : (evalResult.marks || '--');
+        const total = evalResult.total !== undefined ? evalResult.total : (evalResult.totalMarks || '--');
+        document.getElementById('resultSummary').innerHTML = `
+          Student: ${state.currentUser.name}<br>
+          Score: <span style="color:#2563eb; font-size:1.4rem;">${score} / ${total}</span>
+        `;
+      })
+      .catch(err => {
+        showScreen('viewResult');
+        document.getElementById('resultSummary').innerText = "Score save ho gaya hai par response parse nahi hua.";
+      });
+    }
+  </script>
+</body>
+</html>
