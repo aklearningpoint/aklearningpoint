@@ -1,693 +1,84 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0">
-  <title>AK Learning Point - Examination & Learning Portal</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>AK Learning Point | Online Examination & Results Portal</title>
   <style>
-    :root {
-      --primary: #4338ca;
-      --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-      --bg-color: #f8fafc;
-      --card-bg: #ffffff;
-      --text-main: #0f172a;
-      --text-muted: #475569;
-      --border-color: #e2e8f0;
-      --radius-lg: 14px;
-      --radius-md: 10px;
-    }
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg-color); color: var(--text-main); }
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; }
+    body { background: #f8fafc; color: #1e293b; min-height: 100vh; display: flex; flex-direction: column; }
     
-    /* KIOSK / ANTI-CHEAT FULLSCREEN MODE */
-    body.kiosk-mode {
-      -webkit-user-select: none !important;
-      -moz-user-select: none !important;
-      -ms-user-select: none !important;
-      user-select: none !important;
-      background: #ffffff !important;
-    }
-    body.kiosk-mode .app-header, body.kiosk-mode .nav-drawer { display: none !important; }
+    header { background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white; padding: 24px 20px; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+    header h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 6px; }
+    header p { font-size: 0.95rem; opacity: 0.9; }
 
-    .app-header { position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; background: var(--primary-gradient); color: #fff; height: 60px; box-shadow: 0 2px 10px rgba(79, 70, 229, 0.2); }
-    .brand-zone { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 1.15rem; font-weight: 800; }
-    .header-actions { display: flex; align-items: center; gap: 8px; }
-    .share-btn { background: #25d366; color: #fff; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 700; cursor: pointer; }
-    .hamburger-btn { background: none; border: none; color: #fff; font-size: 1.6rem; cursor: pointer; }
+    .main-container { max-width: 900px; margin: 24px auto; padding: 0 16px; width: 100%; flex: 1; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    
+    .card { background: white; border-radius: 12px; padding: 20px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+    .card h2 { font-size: 1.15rem; color: #0f172a; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    
+    .input-box { width: 100%; padding: 12px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; margin-bottom: 12px; }
+    .input-box:focus { outline: none; border-color: #2563eb; }
 
-    main { max-width: 900px; margin: 0 auto; padding: 14px; min-height: calc(100vh - 60px); }
-    .hidden { display: none !important; }
+    .btn { display: inline-block; width: 100%; padding: 12px; background: #2563eb; color: white; font-weight: 600; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; text-align: center; text-decoration: none; }
+    .btn:hover { background: #1d4ed8; }
+    .btn-green { background: #16a34a; }
+    .btn-green:hover { background: #15803d; }
 
-    .nav-drawer { position: fixed; top: 0; right: 0; width: 80%; max-width: 300px; height: 100vh; background: #fff; z-index: 200; box-shadow: -4px 0 16px rgba(0,0,0,0.25); display: flex; flex-direction: column; }
-    .drawer-header { padding: 16px; background: var(--primary-gradient); color: #fff; display: flex; justify-content: space-between; align-items: center; font-size: 1.2rem; font-weight: 800; }
-    .nav-list { list-style: none; padding: 0; margin: 0; }
-    .nav-list li { padding: 16px; border-bottom: 1px solid var(--border-color); font-weight: 700; cursor: pointer; }
+    .feature-item { padding: 12px; border: 1px solid #f1f5f9; background: #f8fafc; border-radius: 8px; margin-bottom: 10px; }
+    .feature-item h3 { font-size: 0.95rem; margin-bottom: 4px; color: #1e3a8a; }
+    .feature-item p { font-size: 0.82rem; color: #64748b; }
 
-    .hero-banner { background: var(--primary-gradient); color: #fff; padding: 24px 16px; border-radius: var(--radius-lg); text-align: center; margin-bottom: 14px; }
-    .hero-banner h2 { margin: 0 0 4px; font-size: 1.5rem; }
-    .tile-card { display: flex; align-items: center; gap: 14px; padding: 16px; background: #fff; border-radius: var(--radius-lg); border: 1.5px solid var(--border-color); margin-bottom: 10px; cursor: pointer; }
-    .tile-icon { font-size: 2rem; }
-    .tile-content h3 { margin: 0 0 2px; font-size: 1.05rem; }
-    .tile-content p { margin: 0; font-size: 0.85rem; color: var(--text-muted); }
-
-    .item-card { background: var(--card-bg); border: 1.5px solid var(--border-color); border-radius: var(--radius-md); padding: 14px; margin-bottom: 10px; }
-    .primary-btn, .secondary-btn, .print-btn, .danger-btn { width: 100%; min-height: 44px; padding: 10px; border: none; border-radius: var(--radius-md); font-size: 0.95rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; text-decoration: none; }
-    .primary-btn { background: var(--primary-gradient); color: #fff; }
-    .secondary-btn { background: #64748b; color: #fff; }
-    .print-btn { background: #3b82f6; color: #fff; }
-    .danger-btn { background: #ef4444; color: #fff; }
-
-    .form-container { background: #fff; padding: 18px 14px; border-radius: var(--radius-lg); border: 1.5px solid var(--border-color); margin-bottom: 14px; }
-    label { display: block; margin: 12px 0 4px; font-weight: 700; font-size: 0.9rem; }
-    input, select, textarea { width: 100%; padding: 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 1rem; box-sizing: border-box; }
-
-    .page-header-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1.5px solid #e2e8f0; }
-    .back-btn { background: #fff; border: 1.5px solid #cbd5e1; padding: 8px 14px; border-radius: 8px; font-weight: 700; cursor: pointer; }
-
-    /* QUIZ IN-PAGE ENGINE */
-    .kiosk-exam-header { position: sticky; top: 0; z-index: 50; background: #1e1b4b; color: #fff; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; }
-    .exam-timer-bar { background: #fef3c7; padding: 8px 14px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; font-weight: 800; color: #b45309; font-size: 1.1rem; margin: 10px 0; }
-    .option-pill { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 2px solid #cbd5e1; border-radius: var(--radius-md); background: #fff; cursor: pointer; min-height: 50px; margin-bottom: 8px; }
-    .option-pill.selected { border-color: var(--primary); background: #eef2ff; }
-    .opt-key { width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: #f1f5f9; border-radius: 50%; font-weight: 800; }
-    .option-pill.selected .opt-key { background: var(--primary); color: #fff; }
-    .exam-bottom-nav { margin-top: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .nav-arrow-btn { padding: 12px; border-radius: 8px; border: 1.5px solid #cbd5e1; background: #fff; font-weight: 800; cursor: pointer; }
-    .palette-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 14px 0; }
-    .palette-num { padding: 10px; text-align: center; background: #f1f5f9; border-radius: 6px; font-weight: 800; cursor: pointer; }
-    .palette-num.answered { background: #22c55e; color: #fff; }
-    .palette-num.current { border: 2px solid #4338ca; }
-    .passage-card-box { background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 10px; padding: 14px; margin-bottom: 14px; max-height: 250px; overflow-y: auto; font-size: 0.95rem; line-height: 1.6; }
-    .picture-quiz-box { text-align: center; margin: 10px 0 16px; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 10px; }
-    .picture-quiz-box img { max-width: 100%; max-height: 240px; border-radius: 8px; object-fit: contain; }
-
-    /* 3-STYLE OMR ENGINE */
-    .omr-sheet-box { background: #fff; border: 2px solid #000; padding: 18px; color: #000; }
-    .omr-sheet-header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 10px; }
-    .omr-meta-strip { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 6px; border: 1px solid #000; padding: 6px; margin-bottom: 12px; font-size: 0.85rem; font-weight: 700; }
-    .omr-blank-fill { border-bottom: 1px solid #000; min-width: 50px; display: inline-block; }
-    .omr-grid-style-1 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
-    .omr-row-s1 { display: flex; align-items: center; justify-content: space-between; border: 1px solid #cbd5e1; padding: 3px 6px; border-radius: 4px; font-size: 0.82rem; }
-    .omr-bubble-s1 { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid #000; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 800; }
-    .omr-grid-style-2 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
-    .omr-row-s2 { display: flex; align-items: center; justify-content: space-between; background: #f8fafc; border: 1px solid #94a3b8; padding: 3px 6px; font-size: 0.82rem; }
-    .omr-bubble-s2 { width: 24px; height: 16px; border-radius: 10px; border: 1.5px solid #1e293b; display: flex; align-items: center; justify-content: center; font-size: 0.68rem; font-weight: 900; }
-    .omr-grid-style-3 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 16px; }
-    .omr-row-s3 { display: flex; align-items: center; justify-content: space-between; border: 2px solid #000; padding: 4px 8px; font-size: 0.9rem; font-weight: 800; }
-    .omr-bubble-s3 { width: 24px; height: 24px; border: 2px solid #000; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 900; }
-
-    @media print {
-      body * { visibility: hidden !important; }
-      #omrPrintViewSection, #omrPrintViewSection * { visibility: visible !important; }
-      #omrPrintViewSection { position: absolute !important; left: 0 !important; top: 0 !important; width: 100% !important; margin: 0 !important; padding: 8px !important; border: none !important; }
-      .no-print { display: none !important; }
-    }
+    footer { background: #0f172a; color: #94a3b8; text-align: center; padding: 16px; font-size: 0.85rem; margin-top: 30px; }
   </style>
 </head>
 <body>
 
-  <!-- Top Navigation -->
-  <header class="app-header">
-    <div class="brand-zone" onclick="navigate('homeSection')">
-      <i class="fa-solid fa-graduation-cap"></i> AK Learning Point
-    </div>
-    <div class="header-actions">
-      <button class="share-btn" onclick="sharePortalWhatsApp()"><i class="fa-brands fa-whatsapp"></i> Share</button>
-      <button class="hamburger-btn" onclick="toggleNavMenu()">&#9776;</button>
-    </div>
+  <header>
+    <h1>AK Learning Point</h1>
+    <p>CBSE & Competitive Online Testing | Instant Results & Analysis</p>
   </header>
 
-  <!-- Side Navigation Drawer -->
-  <nav id="overlayNav" class="nav-drawer hidden">
-    <div class="drawer-header">
-      <span>Menu</span>
-      <button class="hamburger-btn" onclick="toggleNavMenu()">&times;</button>
+  <div class="main-container">
+    <div class="grid">
+      <!-- Section 1: Enter Test by ID -->
+      <div class="card">
+        <h2>📝 Join Online Test</h2>
+        <p style="font-size: 0.88rem; color: #64748b; margin-bottom: 14px;">Apne teacher se mila hua Quiz Code / ID yahan enter karein:</p>
+        <input type="text" id="directQuizInput" class="input-box" placeholder="e.g. QZ-MATH-7">
+        <button class="btn" onclick="goToExam()">Enter Test Room</button>
+      </div>
+
+      <!-- Section 2: Instructions & Notice -->
+      <div class="card">
+        <h2>ℹ️ Student Exam Guidelines</h2>
+        <div class="feature-item">
+          <h3>⏱️ Automatic Evaluation</h3>
+          <p>Test submit hote hi aapka scorecard generate ho jata hai.</p>
+        </div>
+        <div class="feature-item">
+          <h3>📵 Malpractice Security</h3>
+          <p>Exam ke dauran tab switch ya screen minimize karna strictly monitored hai.</p>
+        </div>
+      </div>
     </div>
-    <ul class="nav-list">
-      <li onclick="navigate('homeSection')">🏠 Home</li>
-      <li onclick="navigate('quizzesSection')">📝 MCQ Quizzes</li>
-      <li onclick="navigate('omrConfigSection')">📄 Generate OMR Sheets</li>
-      <li onclick="navigate('onlineClassesSection')">🎥 Video Classes</li>
-      <li onclick="navigate('studyMaterialSection')">📚 Notes & PDFs</li>
-      <li onclick="navigate('resultSearchSection')">📊 Check Results</li>
-    </ul>
-  </nav>
+  </div>
 
-  <main>
-
-    <!-- 1. HOME SECTION -->
-    <section id="homeSection">
-      <div class="hero-banner">
-        <h2>AK LEARNING POINT</h2>
-        <p>Examination, OMR Sheets & Learning Portal</p>
-      </div>
-
-      <div class="tile-card" onclick="navigate('quizzesSection')">
-        <div class="tile-icon">📝</div>
-        <div class="tile-content">
-          <h3>Daily Online MCQ Tests</h3>
-          <p>Class 1–12, Negative Marking & Timer Tests</p>
-        </div>
-      </div>
-
-      <div class="tile-card" onclick="navigate('omrConfigSection')">
-        <div class="tile-icon">📄</div>
-        <div class="tile-content">
-          <h3>Generate & Print OMR Sheets</h3>
-          <p>Standard Academic, Competitive & Boxed Styles</p>
-        </div>
-      </div>
-
-      <div class="tile-card" onclick="navigate('onlineClassesSection')">
-        <div class="tile-icon">🎥</div>
-        <div class="tile-content">
-          <h3>Online Video Classes</h3>
-          <p>Curated Subject Video Lectures</p>
-        </div>
-      </div>
-
-      <div class="tile-card" onclick="navigate('studyMaterialSection')">
-        <div class="tile-icon">📚</div>
-        <div class="tile-content">
-          <h3>Free Notes & Study PDFs</h3>
-          <p>Download Chapter-wise PDF Notes</p>
-        </div>
-      </div>
-
-      <div class="tile-card" onclick="navigate('resultSearchSection')">
-        <div class="tile-icon">📊</div>
-        <div class="tile-content">
-          <h3>Find Results & Certificates</h3>
-          <p>Check Scores by Mobile Number</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- 2. QUIZZES SECTION -->
-    <section id="quizzesSection" class="hidden">
-      <div class="page-header-nav">
-        <button class="back-btn" onclick="navigate('homeSection')">&#8592; Back</button>
-        <b style="font-size:1.1rem; color:var(--primary);">Active Quizzes</b>
-      </div>
-      <div id="quizContainer">Loading tests...</div>
-    </section>
-
-    <!-- 3. IN-PAGE QUIZ REGISTRATION -->
-    <section id="quizEntrySection" class="hidden">
-      <div class="page-header-nav">
-        <button class="back-btn" onclick="navigate('quizzesSection')">&#8592; Back</button>
-        <b style="font-size:1.1rem; color:var(--primary);">Start Test</b>
-      </div>
-      <div class="form-container">
-        <h2 id="entryQuizTitle" style="margin:0 0 6px;">Quiz Name</h2>
-        <p id="entryQuizMeta" style="color:var(--text-muted); font-size:0.95rem; margin-bottom:12px;"></p>
-        <div id="entryQuizNegRule" style="font-size:0.85rem; font-weight:800; color:#b91c1c; margin-bottom:18px;"></div>
-        
-        <form onsubmit="handleStartQuiz(event)">
-          <input type="hidden" id="entryQuizId">
-          <label>Full Name:</label>
-          <input type="text" id="studentName" required placeholder="Enter student name">
-          <label>Class:</label>
-          <input type="text" id="studentClass" required placeholder="e.g. 10">
-          <label>Mobile Number:</label>
-          <input type="tel" id="studentMobile" required pattern="[0-9]{10}" placeholder="10-digit mobile number">
-          <button type="submit" class="primary-btn" style="margin-top:20px;">🚀 Start Test Now (Fullscreen Kiosk)</button>
-        </form>
-      </div>
-    </section>
-
-    <!-- 4. IN-PAGE KIOSK EXAM RUNNER -->
-    <section id="quizScreenSection" class="hidden">
-      <div class="kiosk-exam-header">
-        <span id="examBrand" style="font-weight:800;">AK Learning Point</span>
-        <button class="danger-btn" style="min-height:36px; width:auto; padding:6px 14px;" onclick="confirmAndSubmitQuiz()">Finish Test</button>
-      </div>
-
-      <div class="exam-timer-bar">
-        <span>⏱ Time: <span id="examTimer">00:00</span></span>
-        <span id="proctorStrikeBadge" style="font-size:0.8rem; background:#fee2e2; color:#b91c1c; padding:2px 8px; border-radius:6px; display:none;">
-          ⚠️ Tab Switches: <b id="proctorStrikeCount">0/2</b>
-        </span>
-      </div>
-
-      <div id="passageViewerBox" class="passage-card-box hidden">
-        <span style="display:inline-block; background:#15803d; color:#fff; font-size:0.75rem; font-weight:800; padding:2px 8px; border-radius:4px; margin-bottom:6px;">📖 Reading Comprehension Passage</span>
-        <div id="passageContentText" style="white-space:pre-wrap;"></div>
-      </div>
-
-      <div id="pictureViewerBox" class="picture-quiz-box hidden">
-        <div><img id="pictureContentImg" src="" alt="Quiz Image"></div>
-      </div>
-
-      <div class="form-container">
-        <div id="questionNumLabel" style="font-size:0.85rem; font-weight:800; color:var(--primary); margin-bottom:4px;">Question 1</div>
-        <div id="questionBody" style="font-size:1.15rem; font-weight:700; margin-bottom:16px;"></div>
-        
-        <div class="options-container">
-          <div class="option-pill" onclick="selectOption('A')"><span class="opt-key">A</span><span id="optLabelA"></span></div>
-          <div class="option-pill" onclick="selectOption('B')"><span class="opt-key">B</span><span id="optLabelB"></span></div>
-          <div class="option-pill" onclick="selectOption('C')"><span class="opt-key">C</span><span id="optLabelC"></span></div>
-          <div class="option-pill" onclick="selectOption('D')"><span class="opt-key">D</span><span id="optLabelD"></span></div>
-        </div>
-
-        <div class="exam-bottom-nav">
-          <button class="nav-arrow-btn" onclick="prevQuestion()">&#8592; Previous</button>
-          <button class="nav-arrow-btn" onclick="nextQuestion()">Next &#8594;</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- 5. IN-PAGE RESULT & CERTIFICATE -->
-    <section id="resultDetailSection" class="hidden">
-      <div class="page-header-nav">
-        <button class="back-btn" onclick="navigate('homeSection')">&#8592; Back to Home</button>
-      </div>
-      <div class="item-card" style="text-align:center;">
-        <h2 id="resStudentName" style="margin:0 0 4px;">Student Name</h2>
-        <p id="resQuizName" style="color:var(--text-muted); margin:0 0 10px;"></p>
-        <div style="font-size:2.2rem; font-weight:900; color:var(--primary);" id="resScore">0</div>
-        <div style="font-size:1rem; font-weight:700; margin-bottom:12px;">Score (<span id="resPercent">0%</span>)</div>
-        <div style="font-size:0.9rem; color:#475569;">
-          Correct: <b style="color:#16a34a;" id="resCorrect">0</b> &bull; Wrong: <b style="color:#dc2626;" id="resWrong">0</b> &bull; Skipped: <b id="resSkipped">0</b>
-        </div>
-      </div>
-    </section>
-
-    <!-- 6. OMR CONFIG -->
-    <section id="omrConfigSection" class="hidden">
-      <div class="page-header-nav">
-        <button class="back-btn" onclick="navigate('homeSection')">&#8592; Back</button>
-        <b style="font-size:1.1rem; color:var(--primary);">Print OMR Sheet</b>
-      </div>
-      <div class="form-container">
-        <label>Institution / Coaching Name:</label>
-        <input type="text" id="omrHost" value="AK Learning Point">
-        <label>Subject / Exam Title:</label>
-        <input type="text" id="omrSubject" placeholder="e.g. Science Chapter Test">
-        <label>Select Format Style:</label>
-        <select id="omrStyle">
-          <option value="1">Style 1: Standard Academic (4-Column Clean Grid)</option>
-          <option value="2">Style 2: Competitive Exam (Dense Pill Format)</option>
-          <option value="3">Style 3: Boxed Cards (Class 1-8 Junior Friendly)</option>
-        </select>
-        <label>Total Questions (10 to 100):</label>
-        <input type="number" id="omrCount" value="50" min="10" max="100">
-        <button class="print-btn" style="margin-top:16px;" onclick="renderOMRSheet()">🖨️ Generate Printable Sheet</button>
-      </div>
-    </section>
-
-    <!-- 7. OMR PRINT PREVIEW SCREEN -->
-    <section id="omrPrintViewSection" class="hidden">
-      <div class="no-print" style="margin-bottom:14px; display:flex; gap:10px;">
-        <button class="print-btn" onclick="window.print()">🖨️ Print Sheet (A4)</button>
-        <button class="secondary-btn" onclick="navigate('omrConfigSection')">&#8592; Back / Edit</button>
-      </div>
-      <div class="omr-sheet-box">
-        <div class="omr-sheet-header">
-          <h2 id="dispOmrHost">AK Learning Point</h2>
-          <div id="dispOmrSub" style="font-weight:800; font-size:1rem; margin-top:2px;">OMR ANSWER SHEET</div>
-        </div>
-        <div class="omr-meta-strip">
-          <div>Name: <span class="omr-blank-fill" style="width:140px;"></span></div>
-          <div>Roll: <span class="omr-blank-fill" style="width:60px;"></span></div>
-          <div>Class: <span class="omr-blank-fill" style="width:50px;"></span></div>
-          <div>Date: <span class="omr-blank-fill" style="width:70px;"></span></div>
-        </div>
-        <div id="omrRenderedGrid"></div>
-        <div style="display:flex; justify-content:space-between; margin-top:20px; font-weight:800; font-size:0.85rem;">
-          <div>Candidate Signature</div>
-          <div>Invigilator Signature</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 8. VIDEO CLASSES SECTION -->
-    <section id="onlineClassesSection" class="hidden">
-      <div class="page-header-nav">
-        <button class="back-btn" onclick="navigate('homeSection')">&#8592; Back</button>
-        <b style="font-size:1.1rem; color:var(--primary);">Video Lectures</b>
-      </div>
-      <div id="classContainer">Loading classes...</div>
-    </section>
-
-    <!-- 9. STUDY MATERIAL SECTION -->
-    <section id="studyMaterialSection" class="hidden">
-      <div class="page-header-nav">
-        <button class="back-btn" onclick="navigate('homeSection')">&#8592; Back</button>
-        <b style="font-size:1.1rem; color:var(--primary);">Notes & PDFs</b>
-      </div>
-      <div id="materialContainer">Loading materials...</div>
-    </section>
-
-    <!-- 10. RESULT LOOKUP SECTION -->
-    <section id="resultSearchSection" class="hidden">
-      <div class="page-header-nav">
-        <button class="back-btn" onclick="navigate('homeSection')">&#8592; Back</button>
-        <b style="font-size:1.1rem; color:var(--primary);">Check Scorecard</b>
-      </div>
-      <div class="form-container">
-        <label>Enter 10-Digit Mobile Number:</label>
-        <input type="tel" id="searchMobile" placeholder="e.g. 9876543210">
-        <button class="primary-btn" style="margin-top:14px;" onclick="searchStudentResult()">🔎 Search Results</button>
-      </div>
-      <div id="resultOutput"></div>
-    </section>
-
-  </main>
+  <footer>
+    &copy; 2026 AK Learning Point. All rights reserved.
+  </footer>
 
   <script>
-    // 🔴 AAPKA CONFIGURED BACKEND ENDPOINT
-    const APP_URL = "https://script.google.com/macros/s/AKfycbwRDQuXVyKGKfCI-kifRPb-vzb8Uv2AIv7YzMSihcP5iKPlR9BJj-DVSSDp8q_VWTij/exec";
-
-    let currentQuizData = null;
-    let quizQuestions = [];
-    let currentIndex = 0;
-    let studentAnswers = {};
-    let timerInterval = null;
-    let remainingSec = 0;
-    let proctorStrikes = 0;
-    let isExamRunning = false;
-    let studentDetails = {};
-
-    function navigate(sectionId) {
-      document.querySelectorAll('main > section').forEach(s => s.classList.add('hidden'));
-      const sec = document.getElementById(sectionId);
-      if (sec) sec.classList.remove('hidden');
-      closeNavMenu();
-      window.scrollTo(0, 0);
-
-      if (sectionId === 'quizzesSection') fetchQuizzes();
-      if (sectionId === 'onlineClassesSection') fetchClasses();
-      if (sectionId === 'studyMaterialSection') fetchMaterials();
-    }
-
-    function toggleNavMenu() { document.getElementById('overlayNav').classList.toggle('hidden'); }
-    function closeNavMenu() { document.getElementById('overlayNav').classList.add('hidden'); }
-
-    function sharePortalWhatsApp() {
-      const msg = "🌟 *AK Learning Point Portal*\n\nAttempt Online MCQ Tests & Watch Video Classes.\n\n👉 *Open Here:*\n" + window.location.href;
-      window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(msg), '_blank');
-    }
-
-    // 1. FETCH QUIZZES - NO REDIRECTION BUTTON!
-    async function fetchQuizzes() {
-      const box = document.getElementById('quizContainer');
-      box.innerHTML = '<div class="item-card"><p>Loading quizzes from database...</p></div>';
-      try {
-        const res = await fetch(`${APP_URL}?action=live_quizzes`);
-        const list = await res.json();
-        box.innerHTML = '';
-        if (!list || list.length === 0) {
-          box.innerHTML = '<div class="item-card"><p>No active quizzes found.</p></div>';
-          return;
-        }
-        list.forEach(q => {
-          const card = document.createElement('div');
-          card.className = 'item-card';
-          // ⚠️ DIRECT IN-PAGE CALL (NO TARGET BLANK REDIRECTION)
-          card.innerHTML = `
-            <h4 style="margin:0 0 4px; font-size:1.1rem;">${q.title}</h4>
-            <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:10px;">
-              Duration: ${q.duration_minutes} Mins | Class: ${q.class_tag} | Board: ${q.board}
-            </div>
-            <button class="primary-btn" onclick="startQuizInPage('${q.quiz_id}')">✍️ Start Test On This Website</button>
-          `;
-          box.appendChild(card);
-        });
-      } catch (err) {
-        box.innerHTML = `<div class="item-card"><p style="color:red;">Error loading quizzes.</p></div>`;
+    function goToExam() {
+      const code = document.getElementById('directQuizInput').value.trim();
+      if (!code) {
+        alert("Kripya Quiz ID enter karein.");
+        return;
       }
-    }
-
-    // 2. OPEN TEST DETAILS IN-PAGE
-    async function startQuizInPage(quizId) {
-      navigate('quizEntrySection');
-      document.getElementById('entryQuizTitle').innerText = "Loading details...";
-      try {
-        const res = await fetch(`${APP_URL}?action=quiz_detail&quiz_id=${quizId}`);
-        const q = await res.json();
-        currentQuizData = q;
-        document.getElementById('entryQuizId').value = q.quiz_id;
-        document.getElementById('entryQuizTitle').innerText = q.title;
-        document.getElementById('entryQuizMeta').innerText = `Duration: ${q.duration_minutes} Mins | Board: ${q.board}`;
-        document.getElementById('entryQuizNegRule').innerText = q.negative_marking_rule === "None" ? "✅ No Negative Marking" : `⚠️ Marking: ${q.negative_marking_rule} Penalty`;
-      } catch(e) { alert("Could not fetch quiz details."); }
-    }
-
-    // 3. START TEST IN KIOSK MODE
-    async function handleStartQuiz(e) {
-      e.preventDefault();
-      studentDetails = {
-        name: document.getElementById('studentName').value.trim(),
-        class: document.getElementById('studentClass').value.trim(),
-        mobile: document.getElementById('studentMobile').value.trim()
-      };
-
-      try {
-        const res = await fetch(`${APP_URL}?action=questions&quiz_id=${currentQuizData.quiz_id}`);
-        quizQuestions = await res.json();
-        if (!quizQuestions || quizQuestions.length === 0) {
-          alert("Is quiz me koi questions nahi mile!");
-          return;
-        }
-
-        currentIndex = 0;
-        studentAnswers = {};
-        remainingSec = (Number(currentQuizData.duration_minutes) || 15) * 60;
-        proctorStrikes = 0;
-        isExamRunning = true;
-
-        document.body.classList.add('kiosk-mode');
-        const el = document.documentElement;
-        if (el.requestFullscreen) { el.requestFullscreen().catch(()=>{}); }
-
-        navigate('quizScreenSection');
-        startTimer();
-        loadQuestion(0);
-        setupProctoring();
-      } catch(err) { alert("Error starting quiz: " + err.message); }
-    }
-
-    function setupProctoring() {
-      ['copy', 'cut', 'paste', 'contextmenu'].forEach(evt => {
-        document.addEventListener(evt, e => {
-          if (isExamRunning) { e.preventDefault(); return false; }
-        });
-      });
-
-      document.addEventListener('visibilitychange', () => {
-        if (!isExamRunning) return;
-        if (document.hidden) {
-          proctorStrikes++;
-          document.getElementById('proctorStrikeBadge').style.display = 'inline-block';
-          document.getElementById('proctorStrikeCount').innerText = `${proctorStrikes}/2`;
-          if (proctorStrikes >= 2) {
-            alert("🚨 Malpractice limit reached! Submitting test.");
-            forceSubmitQuiz();
-          } else {
-            alert("⚠️ Warning (1/2): Tab switch detected! Do not leave exam screen.");
-          }
-        }
-      });
-    }
-
-    function startTimer() {
-      clearInterval(timerInterval);
-      timerInterval = setInterval(() => {
-        remainingSec--;
-        let m = Math.floor(remainingSec / 60);
-        let s = remainingSec % 60;
-        document.getElementById('examTimer').innerText = `${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
-        if (remainingSec <= 0) {
-          clearInterval(timerInterval);
-          alert("Time is up!");
-          forceSubmitQuiz();
-        }
-      }, 1000);
-    }
-
-    function loadQuestion(idx) {
-      if (idx < 0 || idx >= quizQuestions.length) return;
-      currentIndex = idx;
-      const q = quizQuestions[idx];
-
-      document.getElementById('questionNumLabel').innerText = `Question ${idx + 1} of ${quizQuestions.length}`;
-      document.getElementById('questionBody').innerText = q.question_text;
-      document.getElementById('optLabelA').innerText = q.option_a;
-      document.getElementById('optLabelB').innerText = q.option_b;
-      document.getElementById('optLabelC').innerText = q.option_c;
-      document.getElementById('optLabelD').innerText = q.option_d;
-
-      const pBox = document.getElementById('passageViewerBox');
-      if (q.passage_text) {
-        pBox.classList.remove('hidden');
-        document.getElementById('passageContentText').innerText = q.passage_text;
-      } else pBox.classList.add('hidden');
-
-      const picBox = document.getElementById('pictureViewerBox');
-      if (q.image_url) {
-        picBox.classList.remove('hidden');
-        document.getElementById('pictureContentImg').src = q.image_url;
-      } else picBox.classList.add('hidden');
-
-      document.querySelectorAll('.option-pill').forEach(p => p.classList.remove('selected'));
-      const ans = studentAnswers[q.question_id];
-      if (ans) {
-        const pills = document.querySelectorAll('.option-pill');
-        if (ans === 'A') pills[0].classList.add('selected');
-        if (ans === 'B') pills[1].classList.add('selected');
-        if (ans === 'C') pills[2].classList.add('selected');
-        if (ans === 'D') pills[3].classList.add('selected');
-      }
-    }
-
-    function selectOption(opt) {
-      const q = quizQuestions[currentIndex];
-      studentAnswers[q.question_id] = opt;
-      loadQuestion(currentIndex);
-    }
-
-    function nextQuestion() { if (currentIndex < quizQuestions.length - 1) loadQuestion(currentIndex + 1); }
-    function prevQuestion() { if (currentIndex > 0) loadQuestion(currentIndex - 1); }
-
-    function confirmAndSubmitQuiz() {
-      if (confirm("Are you sure you want to finish the test?")) forceSubmitQuiz();
-    }
-
-    async function forceSubmitQuiz() {
-      clearInterval(timerInterval);
-      isExamRunning = false;
-      document.body.classList.remove('kiosk-mode');
-      if (document.exitFullscreen) document.exitFullscreen().catch(()=>{});
-
-      const payload = {
-        action: "submit_attempt",
-        quiz_id: currentQuizData.quiz_id,
-        student_info: studentDetails,
-        answers: studentAnswers,
-        strikes: proctorStrikes
-      };
-
-      try {
-        const res = await fetch(APP_URL, {
-          method: "POST",
-          body: JSON.stringify(payload)
-        });
-        const r = await res.json();
-        document.getElementById('resStudentName').innerText = r.student_name;
-        document.getElementById('resQuizName').innerText = r.quiz_title;
-        document.getElementById('resScore').innerText = r.score;
-        document.getElementById('resPercent').innerText = `${r.percentage}%`;
-        document.getElementById('resCorrect').innerText = r.correctCount;
-        document.getElementById('resWrong').innerText = r.wrongCount;
-        document.getElementById('resSkipped').innerText = r.skippedCount;
-        navigate('resultDetailSection');
-      } catch(e) { alert("Error submitting test: " + e.message); }
-    }
-
-    // 4. OMR, CLASSES & NOTES
-    function renderOMRSheet() {
-      const host = document.getElementById('omrHost').value.trim() || "AK Learning Point";
-      const sub = document.getElementById('omrSubject').value.trim() || "PRACTICE TEST";
-      const style = document.getElementById('omrStyle').value;
-      const count = parseInt(document.getElementById('omrCount').value) || 50;
-
-      document.getElementById('dispOmrHost').innerText = host;
-      document.getElementById('dispOmrSub').innerText = sub.toUpperCase() + " (OMR SHEET)";
-
-      const grid = document.getElementById('omrRenderedGrid');
-      grid.className = '';
-      grid.innerHTML = '';
-      const opts = ['A', 'B', 'C', 'D'];
-
-      if (style === "1") {
-        grid.className = 'omr-grid-style-1';
-        for (let i = 1; i <= count; i++) {
-          let bHtml = opts.map(o => `<div class="omr-bubble-s1">${o}</div>`).join('');
-          grid.innerHTML += `<div class="omr-row-s1"><b>${i < 10 ? '0' + i : i}.</b><div style="display:flex; gap:4px;">${bHtml}</div></div>`;
-        }
-      } else if (style === "2") {
-        grid.className = 'omr-grid-style-2';
-        for (let j = 1; j <= count; j++) {
-          let bHtml2 = opts.map(o => `<div class="omr-bubble-s2">${o}</div>`).join('');
-          grid.innerHTML += `<div class="omr-row-s2"><b>Q${j}</b><div style="display:flex; gap:5px;">${bHtml2}</div></div>`;
-        }
-      } else if (style === "3") {
-        grid.className = 'omr-grid-style-3';
-        for (let k = 1; k <= count; k++) {
-          let bHtml3 = opts.map(o => `<div class="omr-bubble-s3">${o}</div>`).join('');
-          grid.innerHTML += `<div class="omr-row-s3"><span>${k < 10 ? '0' + k : k}.</span><div style="display:flex; gap:6px;">${bHtml3}</div></div>`;
-        }
-      }
-      navigate('omrPrintViewSection');
-    }
-
-    async function fetchClasses() {
-      const box = document.getElementById('classContainer');
-      box.innerHTML = '<div class="item-card"><p>Loading lectures...</p></div>';
-      try {
-        const res = await fetch(`${APP_URL}?action=video_classes`);
-        const list = await res.json();
-        box.innerHTML = '';
-        if (!list || list.length === 0) { box.innerHTML = '<div class="item-card"><p>No classes uploaded yet.</p></div>'; return; }
-        list.forEach(c => {
-          box.innerHTML += `
-            <div class="item-card">
-              <b>${c.video_title}</b>
-              <div style="font-size:0.85rem; color:var(--text-muted); margin:4px 0 10px;">Class: ${c.class_tag}</div>
-              <a href="${c.youtube_link}" target="_blank" class="primary-btn">▶ Watch Video</a>
-            </div>
-          `;
-        });
-      } catch (e) { box.innerHTML = '<div class="item-card"><p>Unable to load classes.</p></div>'; }
-    }
-
-    async function fetchMaterials() {
-      const box = document.getElementById('materialContainer');
-      box.innerHTML = '<div class="item-card"><p>Loading notes...</p></div>';
-      try {
-        const res = await fetch(`${APP_URL}?action=study_notes`);
-        const list = await res.json();
-        box.innerHTML = '';
-        if (!list || list.length === 0) { box.innerHTML = '<div class="item-card"><p>No study PDFs found.</p></div>'; return; }
-        list.forEach(m => {
-          box.innerHTML += `
-            <div class="item-card">
-              <b>${m.title}</b>
-              <div style="font-size:0.85rem; color:var(--text-muted); margin:4px 0 10px;">Class: ${m.class_tag} | ${m.board}</div>
-              <a href="${m.content_or_link}" target="_blank" class="secondary-btn">📄 Open PDF Note</a>
-            </div>
-          `;
-        });
-      } catch (e) { box.innerHTML = '<div class="item-card"><p>Unable to load notes.</p></div>'; }
-    }
-
-    async function searchStudentResult() {
-      const phone = document.getElementById('searchMobile').value.trim();
-      if (!phone || phone.length < 10) { alert('Enter valid 10-digit mobile number'); return; }
-      const out = document.getElementById('resultOutput');
-      out.innerHTML = '<div class="item-card"><p>Searching records...</p></div>';
-      try {
-        const res = await fetch(`${APP_URL}?action=check_results&mobile=${phone}`);
-        const data = await res.json();
-        out.innerHTML = '';
-        if (!data || data.length === 0) {
-          out.innerHTML = '<div class="item-card"><p style="color:red;">No attempts found for this mobile number.</p></div>';
-          return;
-        }
-        data.forEach(r => {
-          out.innerHTML += `
-            <div class="item-card">
-              <b>${r.quiz_title}</b><br>
-              Score: <b style="color:var(--primary); font-size:1.1rem;">${r.score}</b> (${r.percentage}%)<br>
-              Date: ${new Date(r.timestamp).toLocaleDateString()}
-            </div>
-          `;
-        });
-      } catch (e) { out.innerHTML = '<div class="item-card"><p>Error fetching records.</p></div>'; }
+      window.location.href = "quiz.html?quiz_id=" + encodeURIComponent(code);
     }
   </script>
+
 </body>
 </html>
