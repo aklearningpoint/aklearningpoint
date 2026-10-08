@@ -1,20 +1,67 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>AK Learning Point</title>
+  <title>AK Learning Point - Smart Education & Assessment Portal</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #0f172a; display: flex; flex-direction: column; }
+
+    /* Parent Engagement & IQ Promotion Banner */
+    #promoBanner {
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);
+      color: #ffffff;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid #6366f1;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      z-index: 100;
+      flex-shrink: 0;
     }
-    html, body {
+    .promo-content { display: flex; align-items: center; gap: 10px; overflow: hidden; }
+    .iq-badge {
+      background: #fbbf24;
+      color: #78350f;
+      font-weight: 900;
+      font-size: 0.75rem;
+      padding: 4px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+    .promo-text {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #e0e7ff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .promo-action {
+      background: #22c55e;
+      color: #ffffff;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: none;
+      font-weight: 800;
+      font-size: 0.8rem;
+      white-space: nowrap;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(34, 197, 94, 0.4);
+      transition: transform 0.15s ease;
+    }
+    .promo-action:active { transform: scale(0.95); }
+
+    /* Main Viewport Container */
+    #portalContainer {
+      flex: 1;
       width: 100%;
       height: 100%;
-      overflow: hidden;
-      background: #ffffff;
+      position: relative;
     }
     iframe {
       width: 100%;
@@ -22,29 +69,183 @@
       border: none;
       display: block;
     }
+
+    /* Modal Styling */
+    .lead-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .lead-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 24px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      position: relative;
+      animation: modalPop 0.25s ease forwards;
+    }
+    @keyframes modalPop {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .lead-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      color: #64748b;
+      cursor: pointer;
+    }
+    .lead-title { font-size: 1.25rem; font-weight: 800; color: #0f172a; margin-bottom: 4px; }
+    .lead-subtitle { font-size: 0.85rem; color: #64748b; margin-bottom: 18px; line-height: 1.4; }
+    .lead-input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      margin-bottom: 12px;
+      outline: none;
+    }
+    .lead-input:focus { border-color: #4338ca; }
+    .lead-submit-btn {
+      width: 100%;
+      background: #2563eb;
+      color: #ffffff;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .lead-submit-btn:disabled { background: #94a3b8; cursor: not-allowed; }
   </style>
 </head>
 <body>
 
-  <iframe 
-    src="https://script.google.com/macros/s/AKfycbwRDQuXVyKGKfCI-kifRPb-vzb8Uv2AIv7YzMSihcP5iKPlR9BJj-DVSSDp8q_VWTij/exec" 
-    allow="clipboard-write; camera; microphone; fullscreen">
-  </iframe>
-<script>
-  (function() {
-    var params = new URLSearchParams(window.location.search);
-    var rawQId = params.get('quizId') || params.get('quiz_id');
-    if (rawQId) {
-      // Agar WhatsApp link me extra space ya text jud jaye toh sirf pehla word (Quiz ID) uthao
-      var cleanQId = decodeURIComponent(rawQId).trim().split(/[\s\?&#]/)[0];
-      var frame = document.querySelector('iframe');
-      if (frame && cleanQId) {
-        var currentSrc = frame.getAttribute('src').split('?')[0];
-        frame.src = currentSrc + "?quizId=" + encodeURIComponent(cleanQId);
-      }
-    }
-  })();
-</script>
+  <!-- Parent & Student IQ Hook Banner -->
+  <div id="promoBanner">
+    <div class="promo-content">
+      <span class="iq-badge">⚡ IQ & Curiosity Lab</span>
+      <span class="promo-text">Har bachhe me ek Genius hota hai! Interactive Quizzes & Concept Trackers.</span>
+    </div>
+    <button class="promo-action" onclick="openLeadModal()">Join Community ➜</button>
+  </div>
 
+  <!-- Dynamic Application Viewport -->
+  <div id="portalContainer">
+    <iframe id="appFrame" allow="clipboard-write; camera; microphone; fullscreen"></iframe>
+  </div>
+
+  <!-- Registration / Lead Popup Modal -->
+  <div id="leadModal" class="lead-modal-overlay" onclick="closeLeadModal(event)">
+    <div class="lead-card" onclick="event.stopPropagation()">
+      <button class="lead-close" onclick="closeLeadModal()">×</button>
+      <div style="font-size: 2rem; margin-bottom: 6px;">🧠</div>
+      <h3 class="lead-title">Join AK Learning Point</h3>
+      <p class="lead-subtitle">Register to unlock daily concept quizzes, IQ trackers & get direct access to our WhatsApp learning group.</p>
+      
+      <form id="leadForm" onsubmit="handleLeadSubmit(event)">
+        <input type="text" id="leadName" class="lead-input" placeholder="Parent / Student Full Name" required>
+        <input type="text" id="leadClass" class="lead-input" placeholder="Class / Grade (e.g. Class 8)" required>
+        <input type="tel" id="leadPhone" class="lead-input" placeholder="WhatsApp Number (10 digits)" maxlength="10" required pattern="[0-9]{10}">
+        <button type="submit" id="leadSubmitBtn" class="lead-submit-btn">
+          <span>Register & Join WhatsApp</span> ➜
+        </button>
+      </form>
+      <div id="leadStatus" style="font-size: 0.8rem; margin-top: 10px; color: #64748b;"></div>
+    </div>
+  </div>
+
+  <script>
+    /**
+     * CONFIGURATION & URLS
+     */
+    const WHATSAPP_GROUP_LINK = "https://chat.whatsapp.com/YOUR_GROUP_INVITE_CODE_HERE"; // Line 153: Apna WhatsApp group link yahan dalein
+
+    const APP_PORTS = {
+      // 1. Core / Main Management App (Tuition, Ledgers, Dashboard)
+      MAIN_APP: "https://script.google.com/macros/s/AKfycbwRDQuXVyKGKfCl-kifRPb-vzb8Uv2AIv7YzMSihcP5iKPlR9BJj-DVSSDp8q_VWTij/exec",
+      
+      // 2. Standalone Exam Engine (Naya deployment link yahan dalein)
+      EXAM_ENGINE: "PASTE_NEW_EXAM_PORTAL_DEPLOYMENT_URL_HERE",
+
+      // 3. Future Module Sockets
+      LEADERBOARD_ENGINE: "",
+      PDF_REPORT_GENERATOR: "",
+      ATTENDANCE_PORTAL: ""
+    };
+
+    // Modal Handlers
+    function openLeadModal() {
+      document.getElementById('leadModal').style.display = 'flex';
+    }
+    function closeLeadModal() {
+      document.getElementById('leadModal').style.display = 'none';
+    }
+
+    // Lead Capture & Auto-Redirect
+    function handleLeadSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('leadSubmitBtn');
+      const status = document.getElementById('leadStatus');
+
+      const name = document.getElementById('leadName').value.trim();
+      const cls = document.getElementById('leadClass').value.trim();
+      const phone = document.getElementById('leadPhone').value.trim();
+
+      btn.disabled = true;
+      btn.innerText = "Connecting to Group...";
+      status.innerText = "Securing your spot...";
+
+      // Lead capture call via non-blocking beacon/fetch to Main App
+      const captureUrl = APP_PORTS.MAIN_APP + "?action=registerLead&name=" + encodeURIComponent(name) + "&class=" + encodeURIComponent(cls) + "&phone=" + encodeURIComponent(phone);
+      
+      try {
+        fetch(captureUrl, { mode: 'no-cors' });
+      } catch(err) {
+        console.log("Lead logged locally");
+      }
+
+      // 800ms smooth delay dekar seedha WhatsApp group me jump
+      setTimeout(() => {
+        window.location.href = WHATSAPP_GROUP_LINK;
+      }, 800);
+    }
+
+    // Dynamic Port Routing
+    (function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const frame = document.getElementById('appFrame');
+      
+      const qId = urlParams.get('quizId') || urlParams.get('quiz_id');
+      const moduleParam = urlParams.get('module');
+
+      if (qId) {
+        const cleanQId = decodeURIComponent(qId).trim().split(/[\s\?&#]/)[0];
+        frame.src = APP_PORTS.EXAM_ENGINE + "?quizId=" + encodeURIComponent(cleanQId);
+      } else if (moduleParam && APP_PORTS[moduleParam.toUpperCase()]) {
+        frame.src = APP_PORTS[moduleParam.toUpperCase()];
+      } else {
+        frame.src = APP_PORTS.MAIN_APP;
+      }
+    })();
+  </script>
 </body>
 </html>
