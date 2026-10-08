@@ -6,36 +6,77 @@
   <title>AK Learning Point - Assessment & Learning Ecosystem</title>
   <link rel="icon" href="data:,">
   <style>
+    :root {
+      --primary: #2563eb;
+      --secondary: #4f46e5;
+      --dark: #0f172a;
+      --surface: #1e293b;
+      --light: #f8fafc;
+      --border: #334155;
+      --accent: #e11d48;
+      --gold: #fbbf24;
+      --green: #22c55e;
+    }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     html, body { width: 100%; height: 100%; overflow: hidden; background: #0f172a; display: flex; flex-direction: column; }
 
-    /* Parent Engagement & Curiosity Promotion Banner */
-    #promoBanner {
-      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);
+    /* ================= 1. TOP HEADER WITH DRAWER TRIGGER ================= */
+    #topHeader {
+      background: #0f172a;
       color: #ffffff;
       padding: 10px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 2px solid #6366f1;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-      z-index: 100;
+      border-bottom: 1.5px solid #1e293b;
+      z-index: 1000;
       flex-shrink: 0;
     }
-    .promo-content { display: flex; align-items: center; gap: 10px; overflow: hidden; }
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .drawer-btn {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #fff;
+      font-size: 1.25rem;
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .drawer-btn:hover { background: #334155; }
+    .brand-title { font-size: 1.05rem; font-weight: 800; letter-spacing: 0.3px; }
+
+    /* ================= 2. TOP PROMO BANNER ================= */
+    #promoBanner {
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);
+      color: #ffffff;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid #6366f1;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      z-index: 900;
+      flex-shrink: 0;
+    }
+    .promo-content { display: flex; align-items: center; gap: 8px; overflow: hidden; }
     .iq-badge {
-      background: #fbbf24;
+      background: var(--gold);
       color: #78350f;
       font-weight: 900;
-      font-size: 0.75rem;
-      padding: 4px 8px;
-      border-radius: 6px;
+      font-size: 0.7rem;
+      padding: 3px 6px;
+      border-radius: 4px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       white-space: nowrap;
     }
     .promo-text {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 600;
       color: #e0e7ff;
       white-space: nowrap;
@@ -43,26 +84,37 @@
       text-overflow: ellipsis;
     }
     .promo-action {
-      background: #22c55e;
+      background: var(--green);
       color: #ffffff;
-      padding: 6px 14px;
-      border-radius: 20px;
+      padding: 5px 12px;
+      border-radius: 16px;
       border: none;
       font-weight: 800;
-      font-size: 0.8rem;
-      white-space: nowrap;
+      font-size: 0.75rem;
       cursor: pointer;
+      white-space: nowrap;
       box-shadow: 0 2px 6px rgba(34, 197, 94, 0.4);
       transition: transform 0.15s ease;
     }
     .promo-action:active { transform: scale(0.95); }
 
-    /* Main Viewport Container */
-    #portalContainer {
+    /* ================= 3. MAIN SPLIT LAYOUT ================= */
+    #mainLayoutContainer {
       flex: 1;
       width: 100%;
       height: 100%;
+      display: flex;
+      overflow: hidden;
       position: relative;
+    }
+
+    /* Left Side: Viewport Frame (Full Dynamic App) */
+    #portalContainer {
+      flex: 1;
+      height: 100%;
+      position: relative;
+      background: #ffffff;
+      overflow: hidden;
     }
     iframe {
       width: 100%;
@@ -71,13 +123,216 @@
       display: block;
     }
 
-    /* Modal Styling */
+    /* Right Side: Double Square Ads Column */
+    #adsSidebarColumn {
+      width: 324px;
+      height: 100%;
+      background: #0b1120;
+      border-left: 2px solid #1e293b;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 14px;
+      overflow-y: auto;
+      flex-shrink: 0;
+      box-shadow: -4px 0 15px rgba(0,0,0,0.3);
+    }
+
+    /* Common Ad Box Structure */
+    .ad-square-container {
+      width: 100%;
+      min-height: 250px;
+      max-height: 270px;
+      border-radius: 12px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.35);
+      border: 1.5px solid #1e293b;
+    }
+
+    /* Box 1 (Top): Commercial Revenue Ad Space */
+    .commercial-box {
+      background: radial-gradient(circle at top left, #1e293b, #0f172a);
+      border-color: #334155;
+      padding: 16px;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .ad-corner-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: rgba(15, 23, 42, 0.85);
+      color: #94a3b8;
+      font-size: 0.65rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      font-weight: 800;
+      border: 1px solid #334155;
+    }
+    .ad-comm-icon { font-size: 2.2rem; margin-bottom: 8px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
+    .ad-comm-title { font-size: 0.9rem; font-weight: 800; color: #cbd5e1; margin-bottom: 4px; }
+    .ad-comm-sub { font-size: 0.74rem; color: #64748b; line-height: 1.35; max-width: 220px; }
+    .ad-comm-action-btn {
+      margin-top: 12px;
+      background: transparent;
+      border: 1px dashed #64748b;
+      color: #94a3b8;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .ad-comm-action-btn:hover { border-color: #38bdf8; color: #38bdf8; }
+
+    /* Box 2 (Bottom): In-House App Promotion Notice Box */
+    .inhouse-box {
+      background: linear-gradient(145deg, #1e1b4b 0%, #2e1065 100%);
+      border-color: #6366f1;
+      padding: 16px;
+      justify-content: space-between;
+    }
+    .inhouse-head-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .inhouse-notice-pill {
+      background: #e11d48;
+      color: #ffffff;
+      font-size: 0.65rem;
+      font-weight: 900;
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .inhouse-live-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #34d399;
+    }
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      background: #34d399;
+      border-radius: 50%;
+      box-shadow: 0 0 6px #34d399;
+      animation: pulseDot 1.5s infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+    .inhouse-headline {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-top: 4px;
+      line-height: 1.3;
+    }
+    .inhouse-details {
+      font-size: 0.78rem;
+      color: #cbd5e1;
+      margin-top: 6px;
+      line-height: 1.4;
+      flex: 1;
+    }
+    .inhouse-action-btn {
+      background: linear-gradient(90deg, #2563eb, #4f46e5);
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      cursor: pointer;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(37,99,235,0.3);
+      transition: all 0.2s;
+    }
+    .inhouse-action-btn:hover { opacity: 0.95; transform: translateY(-1px); }
+
+    /* ================= 4. SIDE DRAWER NAVIGATION MENU ================= */
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.25s ease;
+    }
+    .drawer-overlay.active { opacity: 1; visibility: visible; }
+
+    .drawer-menu {
+      position: fixed;
+      top: 0;
+      left: -320px;
+      width: 290px;
+      height: 100%;
+      background: #0f172a;
+      border-right: 1.5px solid #1e293b;
+      z-index: 10000;
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 10px 0 25px rgba(0,0,0,0.5);
+    }
+    .drawer-menu.active { left: 0; }
+
+    .drawer-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #1e293b;
+      margin-bottom: 16px;
+    }
+    .drawer-close {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    .drawer-list { list-style: none; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+    .drawer-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 8px;
+      color: #cbd5e1;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .drawer-item:hover, .drawer-item.active { background: #1e293b; color: #fff; }
+    .drawer-item.active { border-left: 3px solid var(--primary); }
+    .drawer-item.reward-item { color: #f43f5e; }
+    .drawer-item.reward-item:hover { background: #881337; color: #fff; }
+
+    /* ================= 5. POPUP MODALS ================= */
     .lead-modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.75);
-      backdrop-filter: blur(4px);
-      z-index: 9999;
+      background: rgba(15, 23, 42, 0.78);
+      backdrop-filter: blur(5px);
+      z-index: 10001;
       display: none;
       align-items: center;
       justify-content: center;
@@ -89,10 +344,10 @@
       padding: 24px;
       width: 100%;
       max-width: 400px;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
       text-align: center;
       position: relative;
-      animation: modalPop 0.25s ease forwards;
+      animation: modalPop 0.22s ease forwards;
     }
     @keyframes modalPop {
       from { transform: scale(0.95); opacity: 0; }
@@ -136,25 +391,119 @@
       gap: 8px;
     }
     .lead-submit-btn:disabled { background: #94a3b8; cursor: not-allowed; }
+
+    /* Small Screen Responsive Layout */
+    @media (max-width: 960px) {
+      #mainLayoutContainer { flex-direction: column; }
+      #adsSidebarColumn {
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        border-left: none;
+        border-top: 2px solid #1e293b;
+        padding: 10px;
+        overflow-x: auto;
+      }
+      .ad-square-container {
+        min-width: 280px;
+        min-height: 190px;
+        max-height: 210px;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <!-- Parent Engagement & Promotion Hook -->
+  <!-- Top Header with Drawer Toggle & Quick PIN Action -->
+  <header id="topHeader">
+    <div class="header-left">
+      <button class="drawer-btn" onclick="toggleDrawer(true)">☰</button>
+      <span class="brand-title">AK LEARNING POINT</span>
+    </div>
+    <div>
+      <button class="drawer-btn" style="font-size:0.95rem; width:auto; padding:0 12px;" onclick="openQuickQuizPrompt()">⚡ Enter Quiz ID</button>
+    </div>
+  </header>
+
+  <!-- Parent Engagement & Promotion Banner -->
   <div id="promoBanner">
     <div class="promo-content">
       <span class="iq-badge">⚡ Curiosity & IQ Lab</span>
       <span class="promo-text">Quizzes bachhon me curiosity jagaati hain! Test IQ with <b>AK Learning Point</b>.</span>
     </div>
-    <button class="promo-action" onclick="openLeadModal()">Register Free ➜</button>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <button class="promo-action" onclick="openLeadModal()">Register Free ➜</button>
+    </div>
   </div>
 
-  <!-- Main Viewport -->
-  <div id="portalContainer">
-    <iframe id="appFrame" allow="clipboard-write; camera; microphone; fullscreen"></iframe>
+  <!-- Main Split Layout: Left App Frame + Right Dual Ads Column -->
+  <main id="mainLayoutContainer">
+    
+    <!-- Left Area: Core Embedded Ecosystem Viewport -->
+    <section id="portalContainer">
+      <iframe id="appFrame" allow="clipboard-write; camera; microphone; fullscreen"></iframe>
+    </section>
+
+    <!-- Right Area: Dual Square Ads Column -->
+    <aside id="adsSidebarColumn">
+      
+      <!-- Box 1 (Top): Commercial Revenue Ad Space -->
+      <div class="ad-square-container commercial-box" id="commercialAdSquare">
+        <span class="ad-corner-badge">Sponsored</span>
+        <div class="ad-comm-icon">📢</div>
+        <h4 class="ad-comm-title">Commercial Ad Space</h4>
+        <p class="ad-comm-sub">Google AdSense banner ya direct brand sponsorships ke liye reserved slot.</p>
+        <button class="ad-comm-action-btn" onclick="openLeadModal()">Promote Your Brand</button>
+      </div>
+
+      <!-- Box 2 (Bottom): In-House App Promotion Notice Box (Admin Post Only) -->
+      <div class="ad-square-container inhouse-box" id="inhouseAdSquare">
+        <div>
+          <div class="inhouse-head-row">
+            <span class="inhouse-notice-pill">⚡ AK Notice</span>
+            <span class="inhouse-live-indicator"><span class="live-dot"></span> Active Now</span>
+          </div>
+          <h4 class="inhouse-headline" id="adNoticeTitle">Class 12th Board Mock Test</h4>
+          <p class="inhouse-details" id="adNoticeDesc">BSEB & CBSE ke curated subjects (Hindi, English, History, Civics) ke live assessments shuru ho chuke hain!</p>
+        </div>
+        <button class="inhouse-action-btn" onclick="openNoticeAction()">Attempt Quiz Arena ➜</button>
+      </div>
+
+    </aside>
+  </main>
+
+  <!-- Side Drawer Backdrop & Menu -->
+  <div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer(false)"></div>
+  <aside class="drawer-menu" id="drawerMenu">
+    <div class="drawer-head">
+      <h3 style="color:#fff; font-size:1.05rem;">Navigation Menu</h3>
+      <button class="drawer-close" onclick="toggleDrawer(false)">✕</button>
+    </div>
+    <ul class="drawer-list">
+      <li class="drawer-item active" onclick="switchModule('HOME')">🏠 Home Screen & Tuition</li>
+      <li class="drawer-item" onclick="switchModule('TEACHER')">👨‍🏫 Teacher Studio (AK@Admin99)</li>
+      <li class="drawer-item" onclick="switchModule('EXAM')">✍️ Online Test & Assessment Arena</li>
+      <li class="drawer-item reward-item" onclick="switchModule('REWARD')">🎁 Rewarding Quizzes Hub</li>
+    </ul>
+    <div style="padding-top:16px; border-top:1px solid #1e293b; font-size:0.75rem; color:#64748b; text-align:center;">
+      AK Learning Point • Central Hub
+    </div>
+  </aside>
+
+  <!-- Enter Quiz ID Prompt Modal -->
+  <div class="lead-modal-overlay" id="quickQuizModal">
+    <div class="lead-card">
+      <button class="lead-close" onclick="closeQuickQuizPrompt()">×</button>
+      <div style="font-size: 2.2rem; margin-bottom: 6px;">⚡</div>
+      <h3 class="lead-title">Enter Quiz Access ID</h3>
+      <p class="lead-subtitle">Direct online test start karne ke liye teacher dwara mila Quiz ID dalein:</p>
+      <input type="text" id="quickQIdInput" class="lead-input" placeholder="e.g. QZ_2b680b39" required>
+      <button class="lead-submit-btn" onclick="startDirectQuiz()">Start Test Now ➜</button>
+      <button onclick="closeQuickQuizPrompt()" style="background:none; border:none; color:#64748b; margin-top:10px; cursor:pointer;">Cancel</button>
+    </div>
   </div>
 
-  <!-- Registration / WhatsApp Lead Modal -->
+  <!-- Lead Registration & WhatsApp Community Modal -->
   <div id="leadModal" class="lead-modal-overlay" onclick="closeLeadModal(event)">
     <div class="lead-card" onclick="event.stopPropagation()">
       <button class="lead-close" onclick="closeLeadModal()">×</button>
@@ -176,27 +525,61 @@
 
   <script>
     /**
-     * CENTRAL MODULE PORTS (ROUTER REGISTRY)
+     * THREE-TIER BACKEND ROUTING REGISTRY
      */
-    const WHATSAPP_GROUP_LINK = "https://chat.whatsapp.com/YOUR_GROUP_INVITE_LINK_HERE"; // Apna WhatsApp group link dalein
-
     const APP_PORTS = {
-      // 1. Core Tuition & Management System
-      MAIN_APP: "https://script.google.com/macros/s/AKfycbx_jhCWfY9RqcJ-aAbRizEqyPbDOUmdX_MaeZ8-OMFQtLTFJgkGOSZCEQ9cZl_SlUsd/exec",
+      // 1. Home / Tuition & Management Hub
+      MAIN_APP: "https://script.google.com/macros/s/AKfycbwRDQuXVyKGKfCl-kifRPb-vzb8Uv2AIv7YzMSihcP5iKPlR9BJj-DVSSDp8q_VWTij/exec",
       
-      // 2. Isolated Anti-Cheat Exam Engine (Test Attempt Portal)
-      EXAM_ENGINE: "PASTE_YOUR_EXAM_ENGINE_URL_HERE",
+      // 2. Anti-Cheat Isolated Exam Engine (Live Tests)
+      EXAM_ENGINE: "https://script.google.com/macros/s/AKfycbwRDQuXVyKGKfCl-kifRPb-vzb8Uv2AIv7YzMSihcP5iKPlR9BJj-DVSSDp8q_VWTij/exec",
 
-      // 3. Teacher Studio (Hierarchical Management, Creator & Editor)
-      TEACHER_STUDIO: "PASTE_YOUR_TEACHER_STUDIO_URL_HERE"
+      // 3. Hierarchical Teacher Studio (Management, Curriculums, Passkey: AK@Admin99)
+      TEACHER_STUDIO: "https://script.google.com/macros/s/AKfycbwRDQuXVyKGKfCl-kifRPb-vzb8Uv2AIv7YzMSihcP5iKPlR9BJj-DVSSDp8q_VWTij/exec"
     };
 
-    function openLeadModal() {
-      document.getElementById('leadModal').style.display = 'flex';
+    const WHATSAPP_GROUP_LINK = "https://chat.whatsapp.com/YOUR_GROUP_INVITE_LINK_HERE";
+    const frame = document.getElementById('appFrame');
+
+    // Drawer Controls
+    function toggleDrawer(isOpen) {
+      document.getElementById('drawerOverlay').classList.toggle('active', isOpen);
+      document.getElementById('drawerMenu').classList.toggle('active', isOpen);
     }
-    function closeLeadModal() {
-      document.getElementById('leadModal').style.display = 'none';
+
+    function switchModule(moduleKey) {
+      toggleDrawer(false);
+      const items = document.querySelectorAll('.drawer-item');
+      items.forEach(el => el.classList.remove('active'));
+
+      if (moduleKey === 'HOME') {
+        frame.src = APP_PORTS.MAIN_APP;
+        items[0].classList.add('active');
+      } else if (moduleKey === 'TEACHER') {
+        frame.src = APP_PORTS.TEACHER_STUDIO;
+        items[1].classList.add('active');
+      } else if (moduleKey === 'EXAM') {
+        frame.src = APP_PORTS.EXAM_ENGINE;
+        items[2].classList.add('active');
+      } else if (moduleKey === 'REWARD') {
+        frame.src = APP_PORTS.TEACHER_STUDIO;
+        items[3].classList.add('active');
+      }
     }
+
+    // Direct Quiz Access Prompt
+    function openQuickQuizPrompt() { document.getElementById('quickQuizModal').style.display = 'flex'; }
+    function closeQuickQuizPrompt() { document.getElementById('quickQuizModal').style.display = 'none'; }
+    function startDirectQuiz() {
+      const qId = document.getElementById('quickQIdInput').value.trim();
+      if (!qId) { alert("Please enter Quiz ID!"); return; }
+      closeQuickQuizPrompt();
+      frame.src = APP_PORTS.EXAM_ENGINE + "?quizId=" + encodeURIComponent(qId);
+    }
+
+    // Lead Capture Handler
+    function openLeadModal() { document.getElementById('leadModal').style.display = 'flex'; }
+    function closeLeadModal(e) { document.getElementById('leadModal').style.display = 'none'; }
 
     function handleLeadSubmit(e) {
       e.preventDefault();
@@ -213,322 +596,56 @@
 
       const captureUrl = APP_PORTS.MAIN_APP + "?action=registerLead&name=" + encodeURIComponent(name) + "&class=" + encodeURIComponent(cls) + "&phone=" + encodeURIComponent(phone);
       
-      try {
-        fetch(captureUrl, { mode: 'no-cors' });
-      } catch(err) {
-        console.log("Lead logged locally");
-      }
+      try { fetch(captureUrl, { mode: 'no-cors' }); } catch(err) { console.log("Lead captured locally"); }
 
       setTimeout(() => {
         window.location.href = WHATSAPP_GROUP_LINK;
       }, 700);
     }
 
-    // Dynamic Traffic Router
-    (function() {
+    // In-House Notice Box Action Handler
+    function openNoticeAction() {
+      frame.src = APP_PORTS.EXAM_ENGINE;
+    }
+
+    /**
+     * UNIFIED MULTI-PROJECT ROUTER & FLOW CONTROLLER
+     */
+    (function routeTraffic() {
       const urlParams = new URLSearchParams(window.location.search);
-      const frame = document.getElementById('appFrame');
-      
       const qId = urlParams.get('quizId') || urlParams.get('quiz_id');
       const panel = urlParams.get('panel') || urlParams.get('mode');
 
       if (qId) {
-        // Agar quiz link hai -> Exam Engine
+        // Flow 1: Student direct Quiz Link -> Isolated Exam Engine
         const cleanQId = decodeURIComponent(qId).trim().split(/[\s\?&#]/)[0];
         frame.src = APP_PORTS.EXAM_ENGINE + "?quizId=" + encodeURIComponent(cleanQId);
       } else if (panel === 'teacher' || panel === 'studio') {
-        // Agar teacher panel kholna hai -> Teacher Studio
+        // Flow 2: Management / Teacher Portal -> Hierarchical Teacher Studio
         frame.src = APP_PORTS.TEACHER_STUDIO;
       } else {
-        // Default -> Main App (Tuition, Ledgers, Public Front)
+        // Flow 3: DEFAULT (Normal Visit) -> MAIN HOME SCREEN (Waise ka waisa load hoga)
         frame.src = APP_PORTS.MAIN_APP;
       }
     })();
-  </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>AK Learning Point - Assessment & Learning Ecosystem</title>
-  <link rel="icon" href="data:,">
-  <style>
-    :root {
-      --primary: #2563eb;
-      --secondary: #4f46e5;
-      --dark: #0f172a;
-      --light: #f8fafc;
-      --accent: #e11d48;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    html, body { width: 100%; height: 100%; overflow: hidden; background: #0f172a; display: flex; flex-direction: column; }
 
-    /* Top Promo Banner */
-    #promoBanner {
-      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);
-      color: #ffffff;
-      padding: 8px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 2px solid #6366f1;
-      z-index: 100;
-      flex-shrink: 0;
-    }
-    .promo-content { display: flex; align-items: center; gap: 8px; overflow: hidden; }
-    .iq-badge {
-      background: #fbbf24;
-      color: #78350f;
-      font-weight: 900;
-      font-size: 0.7rem;
-      padding: 3px 6px;
-      border-radius: 4px;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
-    .promo-text {
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: #e0e7ff;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .promo-action {
-      background: #22c55e;
-      color: #ffffff;
-      padding: 5px 12px;
-      border-radius: 16px;
-      border: none;
-      font-weight: 800;
-      font-size: 0.75rem;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    /* ================= 1. IN-HOUSE AD & NOTIFICATION TICKER ================= */
-    #inhouseAdBar {
-      background: #111827;
-      color: #f8fafc;
-      border-bottom: 1px solid #374151;
-      display: flex;
-      align-items: center;
-      padding: 4px 12px;
-      font-size: 0.78rem;
-      overflow: hidden;
-      flex-shrink: 0;
-      z-index: 95;
-    }
-    .ad-tag-internal {
-      background: #e11d48;
-      color: #fff;
-      font-weight: 800;
-      font-size: 0.65rem;
-      padding: 2px 6px;
-      border-radius: 3px;
-      margin-right: 8px;
-      white-space: nowrap;
-    }
-    .ad-marquee-content {
-      display: flex;
-      gap: 30px;
-      white-space: nowrap;
-      animation: tickerMove 24s linear infinite;
-    }
-    @keyframes tickerMove {
-      0% { transform: translateX(100%); }
-      100% { transform: translateX(-100%); }
-    }
-    .ad-marquee-content:hover { animation-play-state: paused; }
-    .ad-item-link { color: #38bdf8; text-decoration: none; font-weight: 600; cursor: pointer; }
-
-    /* Main Viewport Container */
-    #portalContainer {
-      flex: 1;
-      width: 100%;
-      height: 100%;
-      position: relative;
-    }
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-      display: block;
-    }
-
-    /* ================= 2. COMMERCIAL REVENUE AD SLOT (STICKY BOTTOM) ================= */
-    #commercialAdBox {
-      background: #090d16;
-      border-top: 1px solid #1e293b;
-      padding: 6px 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      flex-shrink: 0;
-      min-height: 52px;
-      z-index: 90;
-    }
-    .ad-commercial-content {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      width: 100%;
-      max-width: 728px;
-      background: #0f172a;
-      border: 1px dashed #334155;
-      border-radius: 6px;
-      padding: 6px 14px;
-      color: #94a3b8;
-      font-size: 0.75rem;
-    }
-    .commercial-badge {
-      background: #334155;
-      color: #cbd5e1;
-      font-size: 0.6rem;
-      padding: 1px 4px;
-      border-radius: 3px;
-      text-transform: uppercase;
-      font-weight: 700;
-    }
-    .ad-close-btn {
-      position: absolute;
-      right: 8px;
-      top: 4px;
-      background: none;
-      border: none;
-      color: #64748b;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-
-    /* Modal Styling */
-    .lead-modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(15, 23, 42, 0.75);
-      backdrop-filter: blur(4px);
-      z-index: 9999;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-    }
-    .lead-card {
-      background: #ffffff;
-      border-radius: 16px;
-      padding: 22px;
-      width: 100%;
-      max-width: 380px;
-      text-align: center;
-      position: relative;
-    }
-    .lead-input {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 8px;
-      font-size: 0.95rem;
-      margin: 10px 0;
-      outline: none;
-    }
-    .lead-btn {
-      width: 100%;
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      padding: 12px;
-      border-radius: 8px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-  </style>
-</head>
-<body>
-
-  <!-- Top Promo Banner -->
-  <div id="promoBanner">
-    <div class="promo-content">
-      <span class="iq-badge">⚡ Curiosity & IQ Lab</span>
-      <span class="promo-text">Quizzes bachhon me curiosity jagaati hain! Test IQ with AK Learning Point.</span>
-    </div>
-    <button class="promo-action" onclick="openLeadModal()">Register Free ➜</button>
-  </div>
-
-  <!-- 1. IN-HOUSE AD & NOTIFICATION TICKER -->
-  <div id="inhouseAdBar">
-    <span class="ad-tag-internal">📢 NOTICES</span>
-    <div class="ad-marquee-content">
-      <span>🔥 <b>New Test Live:</b> Class 12th History & Science Board Mock assessments ab live hain!</span>
-      <span>⭐ <b>Rewarding Quiz:</b> Sunday Special IQ Test me compete karein aur win karein exciting certificates & rewards.</span>
-      <span>📲 <a class="ad-item-link" onclick="openLeadModal()">AK Learning Point WhatsApp community se judne ke liye click karein</a></span>
-    </div>
-  </div>
-
-  <!-- Main Viewport -->
-  <div id="portalContainer">
-    <iframe id="appFrame" allow="clipboard-write; camera; microphone; fullscreen"></iframe>
-  </div>
-
-  <!-- 2. COMMERCIAL REVENUE AD SLOT -->
-  <div id="commercialAdBox">
-    <button class="ad-close-btn" onclick="document.getElementById('commercialAdBox').style.display='none'" title="Hide Ad">✕</button>
-    <div class="ad-commercial-content">
-      <span class="commercial-badge">Ad</span>
-      <!-- Google AdSense code ya affiliate banner yahan directly paste hoga -->
-      <span id="adPlaceholderText">📢 <b>Sponsor / Partner Space:</b> Reach 10,000+ students & parents. Contact for promotions.</span>
-    </div>
-  </div>
-
-  <!-- Lead Modal -->
-  <div class="lead-modal-overlay" id="leadModal">
-    <div class="lead-card">
-      <h3 style="color:#0f172a; margin-bottom:4px;">Join Community</h3>
-      <p style="font-size:0.85rem; color:#64748b; margin-bottom:12px;">Daily test alerts aur notes ke liye WhatsApp community join karein.</p>
-      <input type="text" id="lName" class="lead-input" placeholder="Student Name">
-      <input type="tel" id="lPhone" class="lead-input" placeholder="WhatsApp Number (10 digits)">
-      <button class="lead-btn" onclick="submitLead()">Join WhatsApp Community ➜</button>
-      <button onclick="closeLeadModal()" style="background:none; border:none; color:#64748b; margin-top:10px; cursor:pointer;">Close</button>
-    </div>
-  </div>
-
-  <script>
-    const APP_PORTS = {
-      MAIN_APP: "https://script.google.com/macros/s/AKfycbwRDQuXVyKGKfCl-kifRPb-vzb8Uv2AIv7YzMSihcP5iKPlR9BJj-DVSSDp8q_VWTij/exec",
-      EXAM_ENGINE: "https://script.google.com/macros/s/AKfycbwRDQuXVyKGKfCl-kifRPb-vzb8Uv2AIv7YzMSihcP5iKPlR9BJj-DVSSDp8q_VWTij/exec",
-      TEACHER_STUDIO: "https://script.google.com/macros/s/AKfycbwRDQuXVyKGKfCl-kifRPb-vzb8Uv2AIv7YzMSihcP5iKPlR9BJj-DVSSDp8q_VWTij/exec"
-    };
-
-    const WHATSAPP_GROUP = "https://chat.whatsapp.com/YOUR_GROUP_LINK";
-    const frame = document.getElementById('appFrame');
-
-    function openLeadModal() { document.getElementById('leadModal').style.display = 'flex'; }
-    function closeLeadModal() { document.getElementById('leadModal').style.display = 'none'; }
-    function submitLead() {
-      const name = document.getElementById('lName').value.trim();
-      const phone = document.getElementById('lPhone').value.trim();
-      if (!name || !phone) return;
-      window.open(WHATSAPP_GROUP, '_blank');
-      closeLeadModal();
-    }
-
-    // Router Logic
-    (function initRouter() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const qId = urlParams.get('quizId') || urlParams.get('quiz_id');
-      const panel = urlParams.get('panel');
-
-      if (qId) {
-        frame.src = APP_PORTS.EXAM_ENGINE + "?quizId=" + encodeURIComponent(decodeURIComponent(qId).trim());
-      } else if (panel === 'teacher' || panel === 'studio') {
+    /**
+     * PostMessage Listener: Allows children frames (Main App, Studio, Exam)
+     * to communicate and trigger transitions without breaking parent layout
+     */
+    window.addEventListener('message', function(event) {
+      if (!event.data) return;
+      
+      if (event.data.action === 'launchQuiz' && event.data.quizId) {
+        frame.src = APP_PORTS.EXAM_ENGINE + "?quizId=" + encodeURIComponent(event.data.quizId);
+      }
+      if (event.data.action === 'openTeacherStudio') {
         frame.src = APP_PORTS.TEACHER_STUDIO;
-      } else {
+      }
+      if (event.data.action === 'returnHome') {
         frame.src = APP_PORTS.MAIN_APP;
       }
-    })();
+    });
   </script>
 </body>
 </html>
