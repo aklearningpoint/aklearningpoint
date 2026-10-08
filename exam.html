@@ -1,1 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Exam Arena - AK Learning Point</title>
+  <link rel="icon" href="data:,">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #0f172a; }
+    iframe { width: 100%; height: 100%; border: none; display: block; }
+  </style>
+</head>
+<body>
+  <iframe id="examPortalFrame" allow="clipboard-write; camera; microphone; fullscreen"></iframe>
 
+  <script>
+    // Yahan Exam Engine ka Web App URL paste karein:
+    const EXAM_ENGINE_URL = "https://script.google.com/macros/s/AKfycbzbn4UStBdvcZVAWCbcbdH1Yyib27KKu4BCAGLhluZcAOV1Uy0Wua6fKm8k_VI-bL7U/exec";
+
+    (function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const quizId = urlParams.get('quizId') || urlParams.get('quiz_id') || '';
+      const isReward = urlParams.get('reward') || '';
+
+      let targetUrl = EXAM_ENGINE_URL;
+      const queryParts = [];
+
+      if (quizId) {
+        queryParts.push("quizId=" + encodeURIComponent(quizId));
+      }
+      if (isReward) {
+        queryParts.push("reward=" + encodeURIComponent(isReward));
+      }
+
+      if (queryParts.length > 0) {
+        targetUrl += (targetUrl.includes('?') ? '&' : '?') + queryParts.join('&');
+      }
+
+      document.getElementById('examPortalFrame').src = targetUrl;
+    })();
+  </script>
+</body>
+</html>
