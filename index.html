@@ -30,6 +30,18 @@
     src="https://script.google.com/macros/s/AKfycbwRDQuXVyKGKfCI-kifRPb-vzb8Uv2AIv7YzMSihcP5iKPlR9BJj-DVSSDp8q_VWTij/exec" 
     allow="clipboard-write; camera; microphone; fullscreen">
   </iframe>
+  <script>
+    // URL me aayi quizId ko Apps Script iframe ke andar bhejna
+    (function() {
+      var params = new URLSearchParams(window.location.search);
+      var qId = params.get('quizId') || params.get('quiz_id');
+      if (qId) {
+        var frame = document.querySelector('iframe');
+        var baseUrl = "https://script.google.com/macros/s/AKfycbwRDQuXyKGKfCl-kifRPb-vzb8Uv2Alv7YzMSihcP5iKPIR9BJj-DVSSDp8q_VWTij/exec";
+        frame.src = baseUrl + "?quizId=" + encodeURIComponent(qId);
+      }
+    })();
+  </script>
 
 </body>
 </html>
