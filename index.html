@@ -31,18 +31,20 @@
     allow="clipboard-write; camera; microphone; fullscreen">
   </iframe>
 <script>
-    (function() {
-      var params = new URLSearchParams(window.location.search);
-      var rawQId = params.get('quizId') || params.get('quiz_id');
-      if (rawQId) {
-        // Agar WhatsApp ne extra text link me chipka diya ho to sirf pehla word (Quiz ID) uthao
-        var cleanQId = rawQId.trim().split(/[\s\?&]/)[0];
-        var frame = document.querySelector('iframe');
-        var baseUrl = "https://script.google.com/macros/s/AKfycbwRDQuXyKGKfCl-kifRPb-vzb8Uv2Alv7YzMSihcP5iKPIR9BJj-DVSSDp8q_VWTij/exec";
-        frame.src = baseUrl + "?quizId=" + encodeURIComponent(cleanQId);
+  (function() {
+    var params = new URLSearchParams(window.location.search);
+    var rawQId = params.get('quizId') || params.get('quiz_id');
+    if (rawQId) {
+      // Agar WhatsApp link me extra space ya text jud jaye toh sirf pehla word (Quiz ID) uthao
+      var cleanQId = decodeURIComponent(rawQId).trim().split(/[\s\?&#]/)[0];
+      var frame = document.querySelector('iframe');
+      if (frame && cleanQId) {
+        var currentSrc = frame.getAttribute('src').split('?')[0];
+        frame.src = currentSrc + "?quizId=" + encodeURIComponent(cleanQId);
       }
-    })();
-  </script>
+    }
+  })();
+</script>
 
 </body>
 </html>
