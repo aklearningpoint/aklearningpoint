@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>AK Learning Point - Smart Education & Assessment Portal</title>
+  <title>AK Learning Point - Assessment & Learning Ecosystem</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     html, body { width: 100%; height: 100%; overflow: hidden; background: #0f172a; display: flex; flex-direction: column; }
 
-    /* Parent Engagement & IQ Promotion Banner */
+    /* Parent Engagement & Curiosity Promotion Banner */
     #promoBanner {
       background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);
       color: #ffffff;
@@ -139,31 +139,31 @@
 </head>
 <body>
 
-  <!-- Parent & Student IQ Hook Banner -->
+  <!-- Parent Engagement & Promotion Hook -->
   <div id="promoBanner">
     <div class="promo-content">
-      <span class="iq-badge">⚡ IQ & Curiosity Lab</span>
-      <span class="promo-text">Har bachhe me ek Genius hota hai! Interactive Quizzes & Concept Trackers.</span>
+      <span class="iq-badge">⚡ Curiosity & IQ Lab</span>
+      <span class="promo-text">Quizzes bachhon me curiosity jagaati hain! Test IQ with <b>AK Learning Point</b>.</span>
     </div>
-    <button class="promo-action" onclick="openLeadModal()">Join Community ➜</button>
+    <button class="promo-action" onclick="openLeadModal()">Register Free ➜</button>
   </div>
 
-  <!-- Dynamic Application Viewport -->
+  <!-- Main Viewport -->
   <div id="portalContainer">
     <iframe id="appFrame" allow="clipboard-write; camera; microphone; fullscreen"></iframe>
   </div>
 
-  <!-- Registration / Lead Popup Modal -->
+  <!-- Registration / WhatsApp Lead Modal -->
   <div id="leadModal" class="lead-modal-overlay" onclick="closeLeadModal(event)">
     <div class="lead-card" onclick="event.stopPropagation()">
       <button class="lead-close" onclick="closeLeadModal()">×</button>
-      <div style="font-size: 2rem; margin-bottom: 6px;">🧠</div>
+      <div style="font-size: 2.2rem; margin-bottom: 6px;">🧠</div>
       <h3 class="lead-title">Join AK Learning Point</h3>
-      <p class="lead-subtitle">Register to unlock daily concept quizzes, IQ trackers & get direct access to our WhatsApp learning group.</p>
+      <p class="lead-subtitle">Register to unlock daily concept challenges & get added to our WhatsApp learning community!</p>
       
       <form id="leadForm" onsubmit="handleLeadSubmit(event)">
-        <input type="text" id="leadName" class="lead-input" placeholder="Parent / Student Full Name" required>
-        <input type="text" id="leadClass" class="lead-input" placeholder="Class / Grade (e.g. Class 8)" required>
+        <input type="text" id="leadName" class="lead-input" placeholder="Parent / Student Name" required>
+        <input type="text" id="leadClass" class="lead-input" placeholder="Class / Grade (e.g. Class 12)" required>
         <input type="tel" id="leadPhone" class="lead-input" placeholder="WhatsApp Number (10 digits)" maxlength="10" required pattern="[0-9]{10}">
         <button type="submit" id="leadSubmitBtn" class="lead-submit-btn">
           <span>Register & Join WhatsApp</span> ➜
@@ -175,24 +175,21 @@
 
   <script>
     /**
-     * CONFIGURATION & URLS
+     * CENTRAL MODULE PORTS (ROUTER REGISTRY)
      */
-    const WHATSAPP_GROUP_LINK = "https://chat.whatsapp.com/CXwYDb3tRIZ8gSsDuQey0I?s=cl&p=a&mlu=4&ilr=4"; // Line 153: Apna WhatsApp group link yahan dalein
+    const WHATSAPP_GROUP_LINK = "https://chat.whatsapp.com/YOUR_GROUP_INVITE_LINK_HERE"; // Apna WhatsApp group link dalein
 
     const APP_PORTS = {
-      // 1. Core / Main Management App (Tuition, Ledgers, Dashboard)
+      // 1. Core Tuition & Management System
       MAIN_APP: "https://script.google.com/macros/s/AKfycbwRDQuXVyKGKfCl-kifRPb-vzb8Uv2AIv7YzMSihcP5iKPlR9BJj-DVSSDp8q_VWTij/exec",
       
-      // 2. Standalone Exam Engine (Naya deployment link yahan dalein)
-      EXAM_ENGINE: "https://script.google.com/macros/s/AKfycbzbn4UStBdvcZVAWCbcbdH1Yyib27KKu4BCAGLhluZcAOV1Uy0Wua6fKm8k_VI-bL7U/exec",
+      // 2. Isolated Anti-Cheat Exam Engine (Test Attempt Portal)
+      EXAM_ENGINE: "PASTE_YOUR_EXAM_ENGINE_URL_HERE",
 
-      // 3. Future Module Sockets
-      LEADERBOARD_ENGINE: "",
-      PDF_REPORT_GENERATOR: "",
-      ATTENDANCE_PORTAL: ""
+      // 3. Teacher Studio (Hierarchical Management, Creator & Editor)
+      TEACHER_STUDIO: "PASTE_YOUR_TEACHER_STUDIO_URL_HERE"
     };
 
-    // Modal Handlers
     function openLeadModal() {
       document.getElementById('leadModal').style.display = 'flex';
     }
@@ -200,7 +197,6 @@
       document.getElementById('leadModal').style.display = 'none';
     }
 
-    // Lead Capture & Auto-Redirect
     function handleLeadSubmit(e) {
       e.preventDefault();
       const btn = document.getElementById('leadSubmitBtn');
@@ -214,7 +210,6 @@
       btn.innerText = "Connecting to Group...";
       status.innerText = "Securing your spot...";
 
-      // Lead capture call via non-blocking beacon/fetch to Main App
       const captureUrl = APP_PORTS.MAIN_APP + "?action=registerLead&name=" + encodeURIComponent(name) + "&class=" + encodeURIComponent(cls) + "&phone=" + encodeURIComponent(phone);
       
       try {
@@ -223,26 +218,28 @@
         console.log("Lead logged locally");
       }
 
-      // 800ms smooth delay dekar seedha WhatsApp group me jump
       setTimeout(() => {
         window.location.href = WHATSAPP_GROUP_LINK;
-      }, 800);
+      }, 700);
     }
 
-    // Dynamic Port Routing
+    // Dynamic Traffic Router
     (function() {
       const urlParams = new URLSearchParams(window.location.search);
       const frame = document.getElementById('appFrame');
       
       const qId = urlParams.get('quizId') || urlParams.get('quiz_id');
-      const moduleParam = urlParams.get('module');
+      const panel = urlParams.get('panel') || urlParams.get('mode');
 
       if (qId) {
+        // Agar quiz link hai -> Exam Engine
         const cleanQId = decodeURIComponent(qId).trim().split(/[\s\?&#]/)[0];
         frame.src = APP_PORTS.EXAM_ENGINE + "?quizId=" + encodeURIComponent(cleanQId);
-      } else if (moduleParam && APP_PORTS[moduleParam.toUpperCase()]) {
-        frame.src = APP_PORTS[moduleParam.toUpperCase()];
+      } else if (panel === 'teacher' || panel === 'studio') {
+        // Agar teacher panel kholna hai -> Teacher Studio
+        frame.src = APP_PORTS.TEACHER_STUDIO;
       } else {
+        // Default -> Main App (Tuition, Ledgers, Public Front)
         frame.src = APP_PORTS.MAIN_APP;
       }
     })();
