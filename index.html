@@ -12,19 +12,19 @@
       --dark: #0f172a;
       --surface: #1e293b;
       --light: #f8fafc;
-      --border: #334155;
+      --border: #e2e8f0;
       --accent: #e11d48;
       --gold: #fbbf24;
       --green: #22c55e;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    html, body { width: 100%; height: 100%; overflow: hidden; background: #0f172a; display: flex; flex-direction: column; }
+    html, body { width: 100%; height: 100%; background: #f1f5f9; display: flex; flex-direction: column; overflow-x: hidden; }
 
-    /* ================= 1. TOP HEADER WITH DRAWER TRIGGER ================= */
+    /* ================= 1. TOP HEADER WITH DRAWER ================= */
     #topHeader {
       background: #0f172a;
       color: #ffffff;
-      padding: 10px 16px;
+      padding: 12px 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -33,33 +33,28 @@
       flex-shrink: 0;
     }
     .header-left { display: flex; align-items: center; gap: 12px; }
+    .brand-logo { width: 34px; height: 34px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; font-weight: 900; color: #2563eb; font-size: 0.9rem; }
+    .brand-title { font-size: 1.15rem; font-weight: 800; letter-spacing: 0.3px; }
     .drawer-btn {
-      background: #1e293b;
-      border: 1px solid #334155;
+      background: transparent;
+      border: none;
       color: #fff;
-      font-size: 1.25rem;
-      width: 38px;
-      height: 38px;
-      border-radius: 8px;
+      font-size: 1.6rem;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
-      transition: background 0.2s;
     }
-    .drawer-btn:hover { background: #334155; }
-    .brand-title { font-size: 1.05rem; font-weight: 800; letter-spacing: 0.3px; }
 
-    /* ================= 2. TOP PROMO BANNER ================= */
+    /* ================= 2. TOP PROMOTIONAL BANNER ================= */
     #promoBanner {
       background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);
       color: #ffffff;
-      padding: 8px 16px;
+      padding: 8px 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       border-bottom: 2px solid #6366f1;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
       z-index: 900;
       flex-shrink: 0;
     }
@@ -72,7 +67,6 @@
       padding: 3px 6px;
       border-radius: 4px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
       white-space: nowrap;
     }
     .promo-text {
@@ -93,52 +87,75 @@
       font-size: 0.75rem;
       cursor: pointer;
       white-space: nowrap;
-      box-shadow: 0 2px 6px rgba(34, 197, 94, 0.4);
-      transition: transform 0.15s ease;
     }
-    .promo-action:active { transform: scale(0.95); }
 
     /* ================= 3. MAIN SPLIT LAYOUT ================= */
     #mainLayoutContainer {
       flex: 1;
       width: 100%;
-      height: 100%;
       display: flex;
-      overflow: hidden;
       position: relative;
     }
 
-    /* Left Side: Viewport Frame (Full Dynamic App) */
+    /* Left Area: Native Dashboard Screen */
     #portalContainer {
       flex: 1;
-      height: 100%;
-      position: relative;
-      background: #ffffff;
-      overflow: hidden;
-    }
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-      display: block;
+      padding: 20px 24px;
+      overflow-y: auto;
+      max-width: 1200px;
+      margin: 0 auto;
     }
 
-    /* Right Side: Double Square Ads Column */
+    /* Blue Banner */
+    .hero-banner {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #fff;
+      border-radius: 14px;
+      padding: 22px 24px;
+      margin-bottom: 22px;
+      box-shadow: 0 4px 14px rgba(37,99,235,0.2);
+    }
+    .hero-banner h2 { font-size: 1.35rem; font-weight: 800; margin-bottom: 6px; }
+    .hero-banner p { font-size: 0.88rem; color: #dbeafe; }
+
+    /* 6 Main Grid Cards */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .feature-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    }
+    .feature-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+      border-color: #93c5fd;
+    }
+    .card-icon { font-size: 2.2rem; }
+    .card-title { font-size: 1.05rem; font-weight: 800; color: #0f172a; }
+    .card-desc { font-size: 0.82rem; color: #64748b; line-height: 1.4; }
+
+    /* Right Side: Dual Square Ads Column */
     #adsSidebarColumn {
       width: 324px;
-      height: 100%;
       background: #0b1120;
       border-left: 2px solid #1e293b;
       display: flex;
       flex-direction: column;
       gap: 16px;
-      padding: 14px;
-      overflow-y: auto;
+      padding: 16px;
       flex-shrink: 0;
-      box-shadow: -4px 0 15px rgba(0,0,0,0.3);
     }
-
-    /* Common Ad Box Structure */
     .ad-square-container {
       width: 100%;
       min-height: 250px;
@@ -152,7 +169,7 @@
       border: 1.5px solid #1e293b;
     }
 
-    /* Box 1 (Top): Commercial Revenue Ad Space */
+    /* Box 1 (Top): Commercial Ad */
     .commercial-box {
       background: radial-gradient(circle at top left, #1e293b, #0f172a);
       border-color: #334155;
@@ -174,7 +191,7 @@
       font-weight: 800;
       border: 1px solid #334155;
     }
-    .ad-comm-icon { font-size: 2.2rem; margin-bottom: 8px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
+    .ad-comm-icon { font-size: 2.2rem; margin-bottom: 8px; }
     .ad-comm-title { font-size: 0.9rem; font-weight: 800; color: #cbd5e1; margin-bottom: 4px; }
     .ad-comm-sub { font-size: 0.74rem; color: #64748b; line-height: 1.35; max-width: 220px; }
     .ad-comm-action-btn {
@@ -188,65 +205,18 @@
       cursor: pointer;
       font-weight: 700;
     }
-    .ad-comm-action-btn:hover { border-color: #38bdf8; color: #38bdf8; }
 
-    /* Box 2 (Bottom): In-House App Promotion Notice Box */
+    /* Box 2 (Bottom): In-House Notice Box */
     .inhouse-box {
       background: linear-gradient(145deg, #1e1b4b 0%, #2e1065 100%);
       border-color: #6366f1;
       padding: 16px;
       justify-content: space-between;
     }
-    .inhouse-head-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 6px;
-    }
-    .inhouse-notice-pill {
-      background: #e11d48;
-      color: #ffffff;
-      font-size: 0.65rem;
-      font-weight: 900;
-      padding: 2px 6px;
-      border-radius: 4px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .inhouse-live-indicator {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 0.65rem;
-      font-weight: 700;
-      color: #34d399;
-    }
-    .live-dot {
-      width: 7px;
-      height: 7px;
-      background: #34d399;
-      border-radius: 50%;
-      box-shadow: 0 0 6px #34d399;
-      animation: pulseDot 1.5s infinite;
-    }
-    @keyframes pulseDot {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.85); }
-    }
-    .inhouse-headline {
-      font-size: 1.05rem;
-      font-weight: 800;
-      color: #ffffff;
-      margin-top: 4px;
-      line-height: 1.3;
-    }
-    .inhouse-details {
-      font-size: 0.78rem;
-      color: #cbd5e1;
-      margin-top: 6px;
-      line-height: 1.4;
-      flex: 1;
-    }
+    .inhouse-head-row { display: flex; justify-content: space-between; align-items: center; }
+    .inhouse-notice-pill { background: #e11d48; color: #fff; font-size: 0.65rem; font-weight: 900; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; }
+    .inhouse-headline { font-size: 1.05rem; font-weight: 800; color: #ffffff; margin-top: 6px; line-height: 1.3; }
+    .inhouse-details { font-size: 0.78rem; color: #cbd5e1; margin-top: 6px; line-height: 1.4; flex: 1; }
     .inhouse-action-btn {
       background: linear-gradient(90deg, #2563eb, #4f46e5);
       color: #ffffff;
@@ -258,12 +228,9 @@
       cursor: pointer;
       width: 100%;
       text-align: center;
-      box-shadow: 0 4px 10px rgba(37,99,235,0.3);
-      transition: all 0.2s;
     }
-    .inhouse-action-btn:hover { opacity: 0.95; transform: translateY(-1px); }
 
-    /* ================= 4. SIDE DRAWER NAVIGATION MENU ================= */
+    /* ================= 4. STRICT SIDE DRAWER ================= */
     .drawer-overlay {
       position: fixed;
       inset: 0;
@@ -279,373 +246,164 @@
     .drawer-menu {
       position: fixed;
       top: 0;
-      left: -320px;
+      right: -320px;
       width: 290px;
       height: 100%;
-      background: #0f172a;
-      border-right: 1.5px solid #1e293b;
+      background: #ffffff;
+      border-left: 1.5px solid #cbd5e1;
       z-index: 10000;
       padding: 20px 16px;
       display: flex;
       flex-direction: column;
-      transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 10px 0 25px rgba(0,0,0,0.5);
+      transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: -10px 0 25px rgba(0,0,0,0.15);
     }
-    .drawer-menu.active { left: 0; }
+    .drawer-menu.active { right: 0; }
 
     .drawer-head {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 16px;
-      border-bottom: 1px solid #1e293b;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #e2e8f0;
       margin-bottom: 16px;
     }
-    .drawer-close {
-      background: none;
-      border: none;
-      color: #94a3b8;
-      font-size: 1.5rem;
-      cursor: pointer;
-    }
-    .drawer-list { list-style: none; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+    .drawer-head h3 { font-size: 1.1rem; color: #0f172a; font-weight: 800; }
+    .drawer-close { background: none; border: none; color: #64748b; font-size: 1.5rem; cursor: pointer; }
+
+    .drawer-list { list-style: none; display: flex; flex-direction: column; gap: 10px; flex: 1; }
     .drawer-item {
       display: flex;
       align-items: center;
       gap: 12px;
       padding: 12px 14px;
       border-radius: 8px;
-      color: #cbd5e1;
+      color: #334155;
       font-weight: 700;
       font-size: 0.9rem;
+      border: 1px solid #e2e8f0;
       cursor: pointer;
+      background: #f8fafc;
       transition: all 0.15s;
     }
-    .drawer-item:hover, .drawer-item.active { background: #1e293b; color: #fff; }
-    .drawer-item.active { border-left: 3px solid var(--primary); }
-    .drawer-item.reward-item { color: #f43f5e; }
-    .drawer-item.reward-item:hover { background: #881337; color: #fff; }
+    .drawer-item:hover { background: #f1f5f9; color: var(--primary); border-color: #93c5fd; }
+    
+    /* Disabled Item Style */
+    .drawer-item.disabled-item {
+      background: #f1f5f9;
+      color: #94a3b8;
+      border-style: dashed;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
 
-    /* ================= 5. POPUP MODALS ================= */
-    .lead-modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(15, 23, 42, 0.78);
-      backdrop-filter: blur(5px);
-      z-index: 10001;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
+    /* Modal */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(4px);
+      z-index: 10001; display: none; align-items: center; justify-content: center; padding: 16px;
     }
-    .lead-card {
-      background: #ffffff;
-      border-radius: 16px;
-      padding: 24px;
-      width: 100%;
-      max-width: 400px;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
-      text-align: center;
-      position: relative;
-      animation: modalPop 0.22s ease forwards;
+    .modal-box {
+      background: #fff; border-radius: 14px; padding: 22px; width: 100%; max-width: 380px; text-align: center;
     }
-    @keyframes modalPop {
-      from { transform: scale(0.95); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
+    .modal-input {
+      width: 100%; padding: 10px; border: 1.5px solid #cbd5e1; border-radius: 6px; margin: 10px 0; outline: none; font-size: 0.9rem;
     }
-    .lead-close {
-      position: absolute;
-      top: 14px;
-      right: 14px;
-      background: none;
-      border: none;
-      font-size: 1.4rem;
-      color: #64748b;
-      cursor: pointer;
-    }
-    .lead-title { font-size: 1.25rem; font-weight: 800; color: #0f172a; margin-bottom: 4px; }
-    .lead-subtitle { font-size: 0.85rem; color: #64748b; margin-bottom: 18px; line-height: 1.4; }
-    .lead-input {
-      width: 100%;
-      padding: 12px 14px;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 8px;
-      font-size: 0.95rem;
-      margin-bottom: 12px;
-      outline: none;
-    }
-    .lead-input:focus { border-color: #4338ca; }
-    .lead-submit-btn {
-      width: 100%;
-      background: #2563eb;
-      color: #ffffff;
-      border: none;
-      padding: 12px;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-    .lead-submit-btn:disabled { background: #94a3b8; cursor: not-allowed; }
 
-    /* Small Screen Responsive Layout */
     @media (max-width: 960px) {
       #mainLayoutContainer { flex-direction: column; }
-      #adsSidebarColumn {
-        width: 100%;
-        height: auto;
-        flex-direction: row;
-        border-left: none;
-        border-top: 2px solid #1e293b;
-        padding: 10px;
-        overflow-x: auto;
-      }
-      .ad-square-container {
-        min-width: 280px;
-        min-height: 190px;
-        max-height: 210px;
-      }
+      #adsSidebarColumn { width: 100%; flex-direction: row; overflow-x: auto; border-left: none; border-top: 2px solid #1e293b; }
+      .ad-square-container { min-width: 280px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Top Header with Drawer Toggle & Quick PIN Action -->
+  <!-- 1. Header with Menu Button -->
   <header id="topHeader">
     <div class="header-left">
-      <button class="drawer-btn" onclick="toggleDrawer(true)">☰</button>
-      <span class="brand-title">AK LEARNING POINT</span>
+      <div class="brand-logo">AK</div>
+      <span class="brand-title">AK Learning Point</span>
     </div>
-    <div>
-      <button class="drawer-btn" style="font-size:0.95rem; width:auto; padding:0 12px;" onclick="openQuickQuizPrompt()">⚡ Enter Quiz ID</button>
-    </div>
+    <button class="drawer-btn" onclick="toggleDrawer(true)">☰</button>
   </header>
 
-  <!-- Parent Engagement & Promotion Banner -->
+  <!-- 2. Promotion Top Banner -->
   <div id="promoBanner">
     <div class="promo-content">
-      <span class="iq-badge">⚡ Curiosity & IQ Lab</span>
-      <span class="promo-text">Quizzes bachhon me curiosity jagaati hain! Test IQ with <b>AK Learning Point</b>.</span>
+      <span class="iq-badge">Curiosity & IQ Lab</span>
+      <span class="promo-text">Quizzes bachhon me curiosity jagaati hain! Test IQ with AK Learning Point.</span>
     </div>
-    <div style="display:flex; align-items:center; gap:8px;">
-      <button class="promo-action" onclick="openLeadModal()">Register Free ➜</button>
-    </div>
+    <button class="promo-action" onclick="openLeadModal()">Register Free ➜</button>
   </div>
 
-  <!-- Main Split Layout: Left App Frame + Right Dual Ads Column -->
+  <!-- 3. Main Screen + Right Ads -->
   <main id="mainLayoutContainer">
     
-    <!-- Left Area: Core Embedded Ecosystem Viewport -->
+    <!-- Center Native Dashboard -->
     <section id="portalContainer">
-      <iframe id="appFrame" allow="clipboard-write; camera; microphone; fullscreen"></iframe>
+      <div class="hero-banner">
+        <h2>Smart Student Learning & Assessment Hub</h2>
+        <p>Choose an option below to attempt live tests, view reports, or access resources.</p>
+      </div>
+
+      <!-- 6 Fixed Functional Cards -->
+      <div class="dashboard-grid">
+        
+        <!-- 1. Live Quiz Panel -->
+        <div class="feature-card" onclick="location.href='exam.html'">
+          <div class="card-icon">📝</div>
+          <div class="card-title">1. Live Quiz Panel</div>
+          <div class="card-desc">Class-wise BSEB, CBSE & Universal competitive exams attempt karein.</div>
+        </div>
+
+        <!-- 2. Download Result -->
+        <div class="feature-card" onclick="alert('Result portal loading...')">
+          <div class="card-icon">📊</div>
+          <div class="card-title">2. Download Result</div>
+          <div class="card-desc">Enter mobile number to view certificates and detailed solutions.</div>
+        </div>
+
+        <!-- 3. Print OMR Sheet -->
+        <div class="feature-card" onclick="location.href='teacher.html'">
+          <div class="card-icon">📄</div>
+          <div class="card-title">3. Print OMR Sheet</div>
+          <div class="card-desc">Generate eco-friendly A4 test papers & official answer sheets.</div>
+        </div>
+
+        <!-- 4. Rewarding Quiz -->
+        <div class="feature-card" onclick="location.href='exam.html?reward=true'">
+          <div class="card-icon">🏆</div>
+          <div class="card-title">4. Rewarding Quiz</div>
+          <div class="card-desc">Compete in scheduled prize-money assessments & leaderboard.</div>
+        </div>
+
+        <!-- 5. Video Classes -->
+        <div class="feature-card" onclick="alert('Video lectures portal opening...')">
+          <div class="card-icon">🎥</div>
+          <div class="card-title">5. Video Classes</div>
+          <div class="card-desc">Watch curated recorded lectures directly organized chapter-wise.</div>
+        </div>
+
+        <!-- 6. Study Materials -->
+        <div class="feature-card" onclick="alert('Study material repository opening...')">
+          <div class="card-icon">📚</div>
+          <div class="card-title">6. Study Materials</div>
+          <div class="card-desc">Download notes, formula sheets, and class assignments.</div>
+        </div>
+
+      </div>
     </section>
 
-    <!-- Right Area: Dual Square Ads Column -->
+    <!-- Right Dual Square Ads Column -->
     <aside id="adsSidebarColumn">
-      
-      <!-- Box 1 (Top): Commercial Revenue Ad Space -->
-      <div class="ad-square-container commercial-box" id="commercialAdSquare">
+      <!-- Box 1: Commercial Revenue Space -->
+      <div class="ad-square-container commercial-box">
         <span class="ad-corner-badge">Sponsored</span>
         <div class="ad-comm-icon">📢</div>
         <h4 class="ad-comm-title">Commercial Ad Space</h4>
-        <p class="ad-comm-sub">Google AdSense banner ya direct brand sponsorships ke liye reserved slot.</p>
+        <p class="ad-comm-sub">Google AdSense banner ya direct brand promotions ke liye slot.</p>
         <button class="ad-comm-action-btn" onclick="openLeadModal()">Promote Your Brand</button>
       </div>
 
-      <!-- Box 2 (Bottom): In-House App Promotion Notice Box (Admin Post Only) -->
-      <div class="ad-square-container inhouse-box" id="inhouseAdSquare">
-        <div>
-          <div class="inhouse-head-row">
-            <span class="inhouse-notice-pill">⚡ AK Notice</span>
-            <span class="inhouse-live-indicator"><span class="live-dot"></span> Active Now</span>
-          </div>
-          <h4 class="inhouse-headline" id="adNoticeTitle">Class 12th Board Mock Test</h4>
-          <p class="inhouse-details" id="adNoticeDesc">BSEB & CBSE ke curated subjects (Hindi, English, History, Civics) ke live assessments shuru ho chuke hain!</p>
-        </div>
-        <button class="inhouse-action-btn" onclick="openNoticeAction()">Attempt Quiz Arena ➜</button>
-      </div>
-
-    </aside>
-  </main>
-
-  <!-- Side Drawer Backdrop & Menu -->
-  <div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer(false)"></div>
-  <aside class="drawer-menu" id="drawerMenu">
-    <div class="drawer-head">
-      <h3 style="color:#fff; font-size:1.05rem;">Navigation Menu</h3>
-      <button class="drawer-close" onclick="toggleDrawer(false)">✕</button>
-    </div>
-    <ul class="drawer-list">
-      <li class="drawer-item active" onclick="switchModule('HOME')">🏠 Home Screen & Tuition</li>
-      <li class="drawer-item" onclick="switchModule('TEACHER')">👨‍🏫 Teacher Studio (AK@Admin99)</li>
-      <li class="drawer-item" onclick="switchModule('EXAM')">✍️ Online Test & Assessment Arena</li>
-      <li class="drawer-item reward-item" onclick="switchModule('REWARD')">🎁 Rewarding Quizzes Hub</li>
-    </ul>
-    <div style="padding-top:16px; border-top:1px solid #1e293b; font-size:0.75rem; color:#64748b; text-align:center;">
-      AK Learning Point • Central Hub
-    </div>
-  </aside>
-
-  <!-- Enter Quiz ID Prompt Modal -->
-  <div class="lead-modal-overlay" id="quickQuizModal">
-    <div class="lead-card">
-      <button class="lead-close" onclick="closeQuickQuizPrompt()">×</button>
-      <div style="font-size: 2.2rem; margin-bottom: 6px;">⚡</div>
-      <h3 class="lead-title">Enter Quiz Access ID</h3>
-      <p class="lead-subtitle">Direct online test start karne ke liye teacher dwara mila Quiz ID dalein:</p>
-      <input type="text" id="quickQIdInput" class="lead-input" placeholder="e.g. QZ_2b680b39" required>
-      <button class="lead-submit-btn" onclick="startDirectQuiz()">Start Test Now ➜</button>
-      <button onclick="closeQuickQuizPrompt()" style="background:none; border:none; color:#64748b; margin-top:10px; cursor:pointer;">Cancel</button>
-    </div>
-  </div>
-
-  <!-- Lead Registration & WhatsApp Community Modal -->
-  <div id="leadModal" class="lead-modal-overlay" onclick="closeLeadModal(event)">
-    <div class="lead-card" onclick="event.stopPropagation()">
-      <button class="lead-close" onclick="closeLeadModal()">×</button>
-      <div style="font-size: 2.2rem; margin-bottom: 6px;">🧠</div>
-      <h3 class="lead-title">Join AK Learning Point</h3>
-      <p class="lead-subtitle">Register to unlock daily concept challenges & get added to our WhatsApp learning community!</p>
-      
-      <form id="leadForm" onsubmit="handleLeadSubmit(event)">
-        <input type="text" id="leadName" class="lead-input" placeholder="Parent / Student Name" required>
-        <input type="text" id="leadClass" class="lead-input" placeholder="Class / Grade (e.g. Class 12)" required>
-        <input type="tel" id="leadPhone" class="lead-input" placeholder="WhatsApp Number (10 digits)" maxlength="10" required pattern="[0-9]{10}">
-        <button type="submit" id="leadSubmitBtn" class="lead-submit-btn">
-          <span>Register & Join WhatsApp</span> ➜
-        </button>
-      </form>
-      <div id="leadStatus" style="font-size: 0.8rem; margin-top: 10px; color: #64748b;"></div>
-    </div>
-  </div>
-
-  <script>
-    /**
-     * THREE-TIER BACKEND ROUTING REGISTRY
-     */
-    const APP_PORTS = {
-      // 1. Home / Tuition & Management Hub
-      MAIN_APP: "https://script.google.com/macros/s/AKfycbwRDQuXVyKGKfCl-kifRPb-vzb8Uv2AIv7YzMSihcP5iKPlR9BJj-DVSSDp8q_VWTij/exec",
-      
-      // 2. Anti-Cheat Isolated Exam Engine (Live Tests)
-      EXAM_ENGINE: "https://script.google.com/macros/s/AKfycbwRDQuXVyKGKfCl-kifRPb-vzb8Uv2AIv7YzMSihcP5iKPlR9BJj-DVSSDp8q_VWTij/exec",
-
-      // 3. Hierarchical Teacher Studio (Management, Curriculums, Passkey: AK@Admin99)
-      TEACHER_STUDIO: "https://script.google.com/macros/s/AKfycbwRDQuXVyKGKfCl-kifRPb-vzb8Uv2AIv7YzMSihcP5iKPlR9BJj-DVSSDp8q_VWTij/exec"
-    };
-
-    const WHATSAPP_GROUP_LINK = "https://chat.whatsapp.com/YOUR_GROUP_INVITE_LINK_HERE";
-    const frame = document.getElementById('appFrame');
-
-    // Drawer Controls
-    function toggleDrawer(isOpen) {
-      document.getElementById('drawerOverlay').classList.toggle('active', isOpen);
-      document.getElementById('drawerMenu').classList.toggle('active', isOpen);
-    }
-
-    function switchModule(moduleKey) {
-      toggleDrawer(false);
-      const items = document.querySelectorAll('.drawer-item');
-      items.forEach(el => el.classList.remove('active'));
-
-      if (moduleKey === 'HOME') {
-        frame.src = APP_PORTS.MAIN_APP;
-        items[0].classList.add('active');
-      } else if (moduleKey === 'TEACHER') {
-        frame.src = APP_PORTS.TEACHER_STUDIO;
-        items[1].classList.add('active');
-      } else if (moduleKey === 'EXAM') {
-        frame.src = APP_PORTS.EXAM_ENGINE;
-        items[2].classList.add('active');
-      } else if (moduleKey === 'REWARD') {
-        frame.src = APP_PORTS.TEACHER_STUDIO;
-        items[3].classList.add('active');
-      }
-    }
-
-    // Direct Quiz Access Prompt
-    function openQuickQuizPrompt() { document.getElementById('quickQuizModal').style.display = 'flex'; }
-    function closeQuickQuizPrompt() { document.getElementById('quickQuizModal').style.display = 'none'; }
-    function startDirectQuiz() {
-      const qId = document.getElementById('quickQIdInput').value.trim();
-      if (!qId) { alert("Please enter Quiz ID!"); return; }
-      closeQuickQuizPrompt();
-      frame.src = APP_PORTS.EXAM_ENGINE + "?quizId=" + encodeURIComponent(qId);
-    }
-
-    // Lead Capture Handler
-    function openLeadModal() { document.getElementById('leadModal').style.display = 'flex'; }
-    function closeLeadModal(e) { document.getElementById('leadModal').style.display = 'none'; }
-
-    function handleLeadSubmit(e) {
-      e.preventDefault();
-      const btn = document.getElementById('leadSubmitBtn');
-      const status = document.getElementById('leadStatus');
-
-      const name = document.getElementById('leadName').value.trim();
-      const cls = document.getElementById('leadClass').value.trim();
-      const phone = document.getElementById('leadPhone').value.trim();
-
-      btn.disabled = true;
-      btn.innerText = "Connecting to Group...";
-      status.innerText = "Securing your spot...";
-
-      const captureUrl = APP_PORTS.MAIN_APP + "?action=registerLead&name=" + encodeURIComponent(name) + "&class=" + encodeURIComponent(cls) + "&phone=" + encodeURIComponent(phone);
-      
-      try { fetch(captureUrl, { mode: 'no-cors' }); } catch(err) { console.log("Lead captured locally"); }
-
-      setTimeout(() => {
-        window.location.href = WHATSAPP_GROUP_LINK;
-      }, 700);
-    }
-
-    // In-House Notice Box Action Handler
-    function openNoticeAction() {
-      frame.src = APP_PORTS.EXAM_ENGINE;
-    }
-
-    /**
-     * UNIFIED MULTI-PROJECT ROUTER & FLOW CONTROLLER
-     */
-    (function routeTraffic() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const qId = urlParams.get('quizId') || urlParams.get('quiz_id');
-      const panel = urlParams.get('panel') || urlParams.get('mode');
-
-      if (qId) {
-        // Flow 1: Student direct Quiz Link -> Isolated Exam Engine
-        const cleanQId = decodeURIComponent(qId).trim().split(/[\s\?&#]/)[0];
-        frame.src = APP_PORTS.EXAM_ENGINE + "?quizId=" + encodeURIComponent(cleanQId);
-      } else if (panel === 'teacher' || panel === 'studio') {
-        // Flow 2: Management / Teacher Portal -> Hierarchical Teacher Studio
-        frame.src = APP_PORTS.TEACHER_STUDIO;
-      } else {
-        // Flow 3: DEFAULT (Normal Visit) -> MAIN HOME SCREEN (Waise ka waisa load hoga)
-        frame.src = APP_PORTS.MAIN_APP;
-      }
-    })();
-
-    /**
-     * PostMessage Listener: Allows children frames (Main App, Studio, Exam)
-     * to communicate and trigger transitions without breaking parent layout
-     */
-    window.addEventListener('message', function(event) {
-      if (!event.data) return;
-      
-      if (event.data.action === 'launchQuiz' && event.data.quizId) {
-        frame.src = APP_PORTS.EXAM_ENGINE + "?quizId=" + encodeURIComponent(event.data.quizId);
-      }
-      if (event.data.action === 'openTeacherStudio') {
-        frame.src = APP_PORTS.TEACHER_STUDIO;
-      }
-      if (event.data.action === 'returnHome') {
-        frame.src = APP_PORTS.MAIN_APP;
-      }
-    });
-  </script>
-</body>
-</html>
+      <!-- Box 2: In-House Notice Space -->
+      <div class="ad-square-container inhouse-box">
